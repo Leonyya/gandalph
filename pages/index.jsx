@@ -6,129 +6,89 @@ import Head from 'next/head'
 import Nav from '../components/nav'
 
 class Home extends Component {
-  static async getInitialProps({ req }) {
-    const response = await fetch('http://localhost:3000/messages')
-    const messages = await response.json()
-    return { messages }
-  }
-  static defaultProps = {
-    messages: []
-  }
-  state = {
-    field: '',
-    messages: this.props.messages
-  }
+	// acá pedimos los datos de los mensajes viejos, esto se ejecuta tanto en el cliente como en el servidor
+	static async getInitialProps ({ req }) {
+		const response = await fetch('http://localhost:3000/messages')
+		const messages = await response.json()
+		return { messages }
+	}
 
-  componentDidMount() {
-    this.socket = io('http://localhost:3000/')
-    this.socket.on('message', this.handleMessage)
-  }
-  componentWillUnmount() {
-    this.socket.off('message', this.handleMessage)
-    this.socket.close()
-  }
-  handleMessage(message) {
-    this.setState(state => ({ messages: state.messages.concat(message) }))
-  }
-  handleChange(event) {
-    this.setState({})
-  }
-  handleSubmit(event) {
-    event.preventDefault()
-    const message = {
-      id: (new Date()).getTime(),
-      value: this.state.field
+	static defaultProps = {
+		messages: []
+	}
 
-    }
-    this.socket.emit('message', message)
-    this.setState(state => ({
-      field: '',
-      messages: state.messages.concat(message)
-    }))
-  }
+	// en el estado guardamos un string vacío (el campo del formulario) y los mensajes que recibimos del API
+	state = {
+		field: '',
+		messages: this.props.messages
+	}
 
-  render(){
-    return(
-      <div>
-        <Head>
-          <title>Home</title>
-        </Head>
+	// una vez que el componente se montó en el navegador nos conectamos al servidor de sockets
+	// y empezamos a recibimos el evento `message` del servidor
+	componentDidMount () {
+		this.socket = io('http://localhost:3000/')
+		this.socket.on('message', this.handleMessage)
+	}
 
-        <Nav />
+	// cuando el componente se va a desmontar es importante que dejemos de escuchar el evento
+	// y que cerremos la conexión por sockets, esto es para evitar problemas de que lleguen mensajes
+	componentWillUnmount () {
+		this.socket.off('message', this.handleMessage)
+		this.socket.close()
+	}
 
-        <div className='hero'>
-          <h1 className='title'>Welcome to Next.js!</h1>
-          <p className='description'>
-            To get started, edit <code>pages/index.js</code> and save to reload.
-          </p>
+	// cuando llega un mensaje del servidor lo agregamos al estado de nuestra página
+	handleMessage = (message) => {
+		this.setState(state => ({ messages: state.messages.concat(message) }))
+	}
 
-          <div className='row'>
-            <ul>
-              {this.state.messages.map(messages =>
-                <li key={message.id}>{message.value}</li>
-              )}
-            </ul>
-            <form onSubmit={this.handleSubmit}>
-              <input
-                onChange = {this.handleSubmit}
-                type='text'
-                placeholder='hola '
-                value={this.state.field}
-              />
-              <button>Enviar</button>
-            </form>
-          </div>
-        </div>
+	// cuando el valor del input cambia actualizamos el estado de nuestra página
+	handleChange = event => {
+		this.setState({ field: event.target.value })
+	}
 
-        <style jsx>{`
-          .hero {
-            width: 100%;
-            color: #333;
-          }
-          .title {
-            margin: 0;
-            width: 100%;
-            padding-top: 80px;
-            line-height: 1.15;
-            font-size: 48px;
-          }
-          .title,
-          .description {
-            text-align: center;
-          }
-          .row {
-            max-width: 880px;
-            margin: 80px auto 40px;
-            display: flex;
-            flex-direction: row;
-            justify-content: space-around;
-          }
-          .card {
-            padding: 18px 18px 24px;
-            width: 220px;
-            text-align: left;
-            text-decoration: none;
-            color: #434343;
-            border: 1px solid #9b9b9b;
-          }
-          .card:hover {
-            border-color: #067df7;
-          }
-          .card h3 {
-            margin: 0;
-            color: #067df7;
-            font-size: 18px;
-          }
-          .card p {
-            margin: 0;
-            padding: 12px 0 0;
-            font-size: 13px;
-            color: #333;
-          }
-        `}</style>
-      </div>
-    )
-  }
+	// cuando se envía el formulario enviamos el mensaje al servidor
+	handleSubmit = event => {
+		event.preventDefault()
+
+		// creamos un objeto message con la fecha actual como ID y el valor del input
+		const message = {
+			id: (new Date()).getTime(),
+			value: this.state.field
+		}
+
+		// enviamos el objeto por socket al servidor
+		this.socket.emit('message', message)
+
+		// lo agregamos a nuestro estado para que se muestre en pantalla y limpiamos el input
+		this.setState(state => ({
+			field: '',
+			messages: state.messages.concat(message)
+		}))
+	}
+
+	render () {
+		return (
+			<main>
+				<div>
+					<ul>
+						{this.state.messages.map(message =>
+							<li key={message.id}>{message.value}</li>
+						)}
+					</ul>
+					<form onSubmit={this.handleSubmit}>
+						<input
+							onChange={this.handleChange}
+							type='text'
+							placeholder='Hola Platzi!'
+							value={this.state.field}
+						/>
+						<button>Enviar</button>
+					</form>
+				</div>
+			</main>
+		)
+	}
 }
 
 export default Home
