@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "express": "^4.17.1",
+    "firebase": "^6.3.3",
     "isomorphic-fetch": "^2.2.1",
     "next": "9.0.2",
     "react": "16.8.6",
