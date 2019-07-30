@@ -52,6 +52,9 @@ class Home extends Component {
 			<div>
 				<Connect/>
 				<h1>{this.state.name}</h1>
+				<style jsx>{`
+					background-color:black;
+				`}</style>
 			</div>
 		)
 	}
