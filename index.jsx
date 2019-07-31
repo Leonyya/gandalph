@@ -8,13 +8,13 @@ import Connect from '../components/Connect'
 import firebase from 'firebase'
 
 let firebaseConfig = {
-	apiKey: process.env.FIREBASE_APIKEY,
-	authDomain: process.env.FIREBASE_AUTHDOMAIN,
-	databaseURL: process.env.FIREBASE_DATABASEURL,
-	projectId: process.env.FIREBASE_APPID,
-	storageBucket: process.env.FIREBASE_STORAGEBUCKET,
-	messagingSenderId: process.env.FIREBASE_MESSAGINGSENDERID,
-	appId: process.env.FIREBASE_APPID
+	apiKey: "AIzaSyBCyovJbc8AuTHaCOJI070fo-Q7YG6VZrQ",
+	authDomain: "infinity-2020.firebaseapp.com",
+	databaseURL: "https://infinity-2020.firebaseio.com",
+	projectId: "infinity-2020",
+	storageBucket: "",
+	messagingSenderId: "1064260992291",
+	appId: "1:1064260992291:web:8181fee94896c0a7"
 };
 try {
 	firebase.initializeApp(firebaseConfig)

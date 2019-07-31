@@ -1,3 +1,5 @@
+const { parsed: localEnv } = require('dotenv').config()
+const webpack = require('webpack')
 const withProgressBar = require('next-progressbar')
 module.exports = withProgressBar({
   webpack: config => {
@@ -5,6 +7,7 @@ module.exports = withProgressBar({
     config.node = {
       fs: 'empty'
     }
+    config.plugins.push(new webpack.EnvironmentPlugin(localEnv))
     return config
   }
 })

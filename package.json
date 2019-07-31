@@ -18,6 +18,7 @@
     "socket.io-client": "^2.2.0"
   },
   "devDependencies": {
+    "dotenv": "^8.0.0",
     "next-progressbar": "^1.0.0",
     "nodemon": "^1.19.1"
   }
