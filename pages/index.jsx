@@ -3,7 +3,6 @@ import io from 'socket.io-client'
 import fetch from 'isomorphic-fetch'
 import Link from 'next/link'
 import Head from 'next/head'
-import Nav from '../components/nav'
 import Connect from '../components/Connect'
 import firebase from 'firebase'
 
@@ -49,13 +48,16 @@ class Home extends Component {
 
 	render () {
 		return (
-			<div className="page-style">
+			<section className="section">
+			<div className="container">
 				<Connect/>
 				<h1>{this.state.name}</h1>
-				<style jsx>{`
-					background-color:black;
-				`}</style>
+
 			</div>
+			<style jsx>{`
+				background-color:black;
+			`}</style>
+			</section>
 		)
 	}
 }
