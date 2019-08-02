@@ -1,6 +1,6 @@
-import React from 'react';
-import App, { Container } from 'next/app';
-import Head from 'next/head';
+import React from 'react'
+import App, { Container } from 'next/app'
+import Head from 'next/head'
 
 class MyApp extends App {
   componentDidMount() {
@@ -20,4 +20,4 @@ class MyApp extends App {
   }
 }
 
-export default MyApp;
+export default MyApp
