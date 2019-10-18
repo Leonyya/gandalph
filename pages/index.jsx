@@ -23,6 +23,7 @@ try {
 	}
 }
 
+
 const database = firebase.database()
 
 class Home extends Component {
@@ -34,12 +35,7 @@ class Home extends Component {
 	}
 
 	componentDidMount () {
-		const nameRef= database.ref().child('name')
-		nameRef.on('value', snapshot => {
-			this.setState({
-				name: snapshot.val()
-			})
-		})
+
 	}
 
 	componentWillUnmount () {

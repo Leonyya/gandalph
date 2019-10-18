@@ -1,6 +1,8 @@
 import { Component } from 'react'
 import * as firebase from 'firebase/app'
 import 'firebase/auth'
+import 'firebase/database'
+
 class Connect extends Component {
   constructor(props) {
     super(props)
@@ -9,6 +11,7 @@ class Connect extends Component {
     }
   }
   componentDidMount() {
+
     firebase.auth().signInAnonymously().catch(error => {
       let errorCode = error.errorCode
       let errorMessage = error.message
@@ -20,6 +23,7 @@ class Connect extends Component {
       if(user) {
         let isAnonymous = user.isAnonymous
         let uid = user.uid
+        firebase.database().ref().set
       } else {
         this.setState({
           message:"Desconectado"
