@@ -1,6 +1,4 @@
 import { Component } from 'react'
-import io from 'socket.io-client'
-import fetch from 'isomorphic-fetch'
 import Link from 'next/link'
 import Head from 'next/head'
 import Connect from '../components/Connect'

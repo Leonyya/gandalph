@@ -23,7 +23,12 @@ class Connect extends Component {
       if(user) {
         let isAnonymous = user.isAnonymous
         let uid = user.uid
-        firebase.database().ref().set
+        firebase.database().ref('client/'+uid).set({
+          email: 'one'
+        })
+        this.setState({
+          message:"Conectado"
+        })
       } else {
         this.setState({
           message:"Desconectado"
