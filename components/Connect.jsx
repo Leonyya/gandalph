@@ -7,7 +7,7 @@ class Connect extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      message: ""
+      message: "",
     }
   }
   componentDidMount() {
@@ -23,9 +23,7 @@ class Connect extends Component {
       if(user) {
         let isAnonymous = user.isAnonymous
         let uid = user.uid
-        firebase.database().ref('client/'+uid).set({
-          email: 'one'
-        })
+        console.log(firebase.auth().currentUser)
         this.setState({
           message:"Conectado"
         })
