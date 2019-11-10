@@ -28,7 +28,7 @@ class Home extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			name: 'Leon'
+			name: 'I think you got the wrong address'
 		}
 	}
 
@@ -45,10 +45,13 @@ class Home extends Component {
 			<div className="container">
 				<Connect/>
 				<h1>{this.state.name}</h1>
-
+				<img src="/static/crash.png"/>
 			</div>
 			<style jsx>{`
-				background-color:black;
+				body {
+					background-color:black;
+					color:white;
+				}
 			`}</style>
 			</section>
 		)
