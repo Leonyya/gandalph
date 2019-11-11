@@ -2,27 +2,7 @@ import { Component } from 'react'
 import Link from 'next/link'
 import Head from 'next/head'
 import Connect from '../components/Connect'
-import firebase from 'firebase'
-
-let firebaseConfig = {
-	apiKey: process.env.FIREBASE_APIKEY,
-	authDomain: process.env.FIREBASE_AUTHDOMAIN,
-	databaseURL: process.env.FIREBASE_DATABASEURL,
-	projectId: process.env.FIREBASE_APPID,
-	storageBucket: process.env.FIREBASE_STORAGEBUCKET,
-	messagingSenderId: process.env.FIREBASE_MESSAGINGSENDERID,
-	appId: process.env.FIREBASE_APPID
-};
-try {
-	firebase.initializeApp(firebaseConfig)
-} catch(err) {
-	if(!/already exists/.test(err.message)) {
-		console.log('Firebase initialization error',err.stack)
-	}
-}
-
-
-const database = firebase.database()
+import { connect } from 'react-redux'
 
 class Home extends Component {
 	constructor(props) {
@@ -31,7 +11,10 @@ class Home extends Component {
 			name: 'I think you got the wrong address'
 		}
 	}
-
+	static getInitialProps({store, isServer, pathname,query}) {
+		store.dispatch({type:'FOO', payload: 'foo'})
+		return { custom: 'custom' }
+	}
 	componentDidMount () {
 	}
 
@@ -46,16 +29,17 @@ class Home extends Component {
 				<Connect/>
 				<h1>{this.state.name}</h1>
 				<img src="/static/crash.png"/>
+				Prop from redux {this.props.foo}
+				Prop from initial {this.props.custom}
 			</div>
 			<style jsx>{`
-				body {
-					background-color:black;
-					color:white;
-				}
+					background-color:white;
+					color:black;
+					text-align:center;
 			`}</style>
 			</section>
 		)
 	}
 }
 
-export default Home
+export default connect(state => state)(Home)
