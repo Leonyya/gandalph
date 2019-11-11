@@ -1,8 +1,6 @@
 import { Component } from 'react'
 import Link from 'next/link'
 import Head from 'next/head'
-import Connect from '../components/Connect'
-import { connect } from 'react-redux'
 
 class Home extends Component {
 	constructor(props) {
@@ -12,8 +10,6 @@ class Home extends Component {
 		}
 	}
 	static getInitialProps({store, isServer, pathname,query}) {
-		store.dispatch({type:'FOO', payload: 'foo'})
-		return { custom: 'custom' }
 	}
 	componentDidMount () {
 	}
@@ -26,11 +22,10 @@ class Home extends Component {
 		return (
 			<section className="section">
 			<div className="container">
-				<Connect/>
+
 				<h1>{this.state.name}</h1>
 				<img src="/static/crash.png"/>
-				Prop from redux {this.props.foo}
-				Prop from initial {this.props.custom}
+
 			</div>
 			<style jsx>{`
 					background-color:white;
@@ -42,4 +37,4 @@ class Home extends Component {
 	}
 }
 
-export default connect(state => state)(Home)
+export default Home

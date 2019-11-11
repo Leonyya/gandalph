@@ -5,24 +5,15 @@ import { createStore, combineReducers, compose } from 'redux'
 import { Provider } from 'react-redux'
 import withRedux from 'next-redux-wrapper'
 import { db, auth } from '../firebase/config'
+import { authReducer } from '../redux/reducers/auth'
 
-
-const reducer = (state = {foo:''}, action) => {
-  switch(action.type){
-    case 'FOO':
-      return { ...state, foo: action.payload}
-    default:
-      return state
-  }
-}
 
 const makeStore = (initialState, options) => {
-  return createStore(reducer, initialState)
+  return createStore(authReducer, initialState)
 }
 
 class MyApp extends App {
   static async getInitialProps({Component, ctx}) {
-    ctx.store.dispatch({type: 'FOO', payload: 'foo'})
     const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {}
     return {pageProps}
   }

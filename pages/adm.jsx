@@ -1,8 +1,12 @@
 import { Component } from 'react'
+import { connect } from 'react-redux'
 
-class AdminPanel extends Component {
+const AdminLogin extends Component {
   constructor(props) {
     super(props)
+  }
+  onSub() {
+    
   }
   render() {
     return (
@@ -42,6 +46,15 @@ class AdminPanel extends Component {
           `}</style>
       </div>
     )
+  }
+}
+
+class AdminPanel extends Component {
+  constructor(props) {
+    super(props)
+  }
+  render() {
+
   }
 }
 

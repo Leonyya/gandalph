@@ -3,7 +3,7 @@ import { LOGIN, HOOK, DEAUTH } from '../types'
 import * as firebase from 'firebase/app'
 import 'firebase/auth'
 
-const login = ({email, passwd}, type) => {
+export const login = ({email, passwd}, type) => {
   if(type != LOGIN) {
     throw new Error('Wrong call')
   }
