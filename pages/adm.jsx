@@ -1,12 +1,12 @@
 import { Component } from 'react'
 import { connect } from 'react-redux'
-
-const AdminLogin extends Component {
+import withAuth from '../components/Session/withAuth.js'
+class AdminLogin extends Component {
   constructor(props) {
     super(props)
   }
   onSub() {
-    
+
   }
   render() {
     return (
@@ -54,7 +54,11 @@ class AdminPanel extends Component {
     super(props)
   }
   render() {
-
+    return(
+      <withAuth>
+        
+      </withAuth>
+    )
   }
 }
 

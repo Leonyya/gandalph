@@ -4,7 +4,6 @@ import Head from 'next/head'
 import { createStore, combineReducers, compose } from 'redux'
 import { Provider } from 'react-redux'
 import withRedux from 'next-redux-wrapper'
-import { db, auth } from '../firebase/config'
 import { authReducer } from '../redux/reducers/auth'
 
 

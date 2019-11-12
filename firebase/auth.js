@@ -1,4 +1,4 @@
-import { auth } from './config'
+import { auth } from './firebase'
 
 export const fHook =  () => auth.signInAnonymously().catch(error => {
     let errorCode = error.errorCode
