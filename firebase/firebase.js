@@ -1,7 +1,7 @@
 import firebase from "firebase/app"
 import "firebase/auth"
 import "firebase/database"
-
+import "firebase/messaging"
  const firebaseConfig = {
 	apiKey: process.env.FIREBASE_APIKEY,
 	authDomain: process.env.FIREBASE_AUTHDOMAIN,
@@ -19,6 +19,7 @@ try {
 		console.log('Firebase initialization error',err.stack)
 	}
 }
+const messaging = firebase.messaging()
 const db = firebase.database()
 const auth = firebase.auth()
 
