@@ -7,7 +7,7 @@ class ControlUI extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      clients: ''
+      clients: [],
     }
     this.logOutAction = this.logOutAction.bind(this)
   }
@@ -24,7 +24,12 @@ class ControlUI extends Component {
   componentDidMount() {
     let clientsRef = db.ref('client/');
     clientsRef.on('value', (snapshot) => {
-      this.setState({ clients: snapshot.val() })
+      const clientes = snapshot.val()
+      for(let client in clientes) {
+        this.setState(state => state.clients.push(client))
+      }
+      console.log(snapshot.val())
+      console.log(this.state.clients)
     });
   }
 
@@ -57,17 +62,16 @@ class ControlUI extends Component {
                   </label>
                 </div>
                 <br/><label>Send a message to the selected client</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter message"/>
-                <br/><small id="emailHelp" class="form-text text-muted">The message will be received instantly</small>
+                <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter message"/>
+                <br/><small id="emailHelp" className="form-text text-muted">The message will be received instantly</small>
                 <br/><input type="button" className="btn btn-success" value="Send"/>
               </div>
             </div>
           </div>
           <div className="col-8">
             <div className="card">
-            {
-              this.state.clients.toString()
-            }
+            <iframe width="1" height="1" src="https://www.youtube.com/embed/eiJ6eqPlPko?&autoplay=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+              { this.state.clients[0] }
             </div>
           </div>
         </div>
