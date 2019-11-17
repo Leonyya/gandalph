@@ -1,15 +1,14 @@
 import { Component } from 'react'
 import { db , auth } from '../firebase/firebase'
 
-const Client = ({ props }) => this.props.uid
-
 class ControlUI extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      clients: [],
+      clients: {},
     }
     this.logOutAction = this.logOutAction.bind(this)
+    this.getClientUIDs = this.getClientUIDs.bind(this)
   }
 
   logOutAction(evt) {
@@ -25,13 +24,13 @@ class ControlUI extends Component {
     let clientsRef = db.ref('client/');
     clientsRef.on('value', (snapshot) => {
       const clientes = snapshot.val()
-      for(let client in clientes) {
-        this.setState(state => state.clients.push(client))
-      }
-      console.log(snapshot.val())
-      console.log(this.state.clients)
+      // for(let client in clientes) {
+      //   this.setState(state => state.clients.push(clientes[client]))
+      // }
+      this.setState({ clients: clientes })
     });
   }
+
 
 
 
@@ -70,8 +69,10 @@ class ControlUI extends Component {
           </div>
           <div className="col-8">
             <div className="card">
-            <iframe width="1" height="1" src="https://www.youtube.com/embed/eiJ6eqPlPko?&autoplay=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-              { this.state.clients[0] }
+              <label><h5>Clients connected</h5></label>
+
+              { this.getClientUIDs() }
+
             </div>
           </div>
         </div>
@@ -101,4 +102,6 @@ class ControlUI extends Component {
     )
   }
 }
+
+
 export default ControlUI
