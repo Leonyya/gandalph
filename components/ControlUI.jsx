@@ -1,6 +1,6 @@
 import { Component } from 'react'
 import { db , auth } from '../firebase/firebase'
-
+import ClientLayout from './ClientLayout'
 class ControlUI extends Component {
   constructor(props) {
     super(props)
@@ -8,7 +8,6 @@ class ControlUI extends Component {
       clients: {},
     }
     this.logOutAction = this.logOutAction.bind(this)
-    this.getClientUIDs = this.getClientUIDs.bind(this)
   }
 
   logOutAction(evt) {
@@ -48,7 +47,7 @@ class ControlUI extends Component {
           </div>
         </div>
         <div className="row" id="content">
-          <div className="col-4">
+          <div className="col-3">
             <div className="card">
               <div className="card-body">
                 <label> Toggle beetwen background colors </label><br/>
@@ -67,12 +66,10 @@ class ControlUI extends Component {
               </div>
             </div>
           </div>
-          <div className="col-8">
-            <div className="card">
+          <div className="col-9">
+            <div className="card" id="clientCard">
               <label><h5>Clients connected</h5></label>
-
-              { this.getClientUIDs() }
-
+              <ClientLayout clients={this.state.clients} />
             </div>
           </div>
         </div>
@@ -87,15 +84,19 @@ class ControlUI extends Component {
 
           #content {
             margin-top:4px;
-            background-color: #737373;
+            background: rgba(255,255,255,.15);
             padding:10px;
-            margin-right:1px;
-            margin-left:1px;
           }
 
           .logoutbutton {
             margin-top: 5px;
             float:right;
+          }
+
+          #clientCard {
+            -webkit-box-shadow: 12px 8px 15px 5px rgba(0,0,0,0.5);
+            -moz-box-shadow: 12px 8px 15px 5px rgba(0,0,0,0.5);
+            box-shadow: 12px 8px 15px 5px rgba(0,0,0,0.5);
           }
         `}</style>
       </div>
