@@ -1,6 +1,10 @@
 import { Component } from 'react'
-
+import { connect } from 'react-redux'
+import { getFoo } from '../redux/selector'
 class ClientLayout extends Component {
+  static getInitialProps({store}) {
+    store.dispatch({type: 'FOO', payload: 'bar'})
+  }  
   constructor(props) {
     super(props)
     this.state = {
@@ -22,13 +26,13 @@ class ClientLayout extends Component {
     for(let client in clients) {
       clientList.push({ [client] : clients[client] })
     }
-    console.log(clientList)
     return clientList
   }
 
   render(){
     return (
       <div>
+        { this.props.foo } 
         <table class="table">
           <thead>
             <tr>
@@ -56,4 +60,4 @@ const Client = (props) => (
     </tr>
 )
 
-export default ClientLayout
+export default connect(state => ({ cl: getFoo }))(ClientLayout)
