@@ -1,0 +1,14 @@
+{
+  "build": {
+    "env": {
+      "FIREBASE_APIKEY" : "AIzaSyBCyovJbc8AuTHaCOJI070fo-Q7YG6VZrQ",
+      "FIREBASE_AUTHDOMAIN" : "infinity-2020.firebaseapp.com",
+      "FIREBASE_DATABASEURL" : "https://infinity-2020.firebaseio.com",
+      "FIREBASE_PROJECTID" : "infinity-2020",
+      "FIREBASE_STORAGEBUCKET" : "",
+      "FIREBASE_MESSAGINGSENDERID": "1064260992291",
+      "FIREBASE_APPID": "1:1064260992291:web:8181fee94896c0a7"
+
+    }
+  }
+}

@@ -1,15 +1,9 @@
 import React from 'react'
 import App, { Container } from 'next/app'
 import Head from 'next/head'
-import { createStore, combineReducers, compose } from 'redux'
 import { Provider } from 'react-redux'
 import withRedux from 'next-redux-wrapper'
-import { authReducer } from '../redux/reducers/auth'
-
-
-const makeStore = (initialState, options) => {
-  return createStore(authReducer, initialState)
-}
+import store from '../redux/store'
 
 class MyApp extends App {
   static async getInitialProps({Component, ctx}) {
@@ -41,4 +35,4 @@ class MyApp extends App {
   }
 }
 
-export default withRedux(makeStore)(MyApp)
+export default withRedux(store)(MyApp)
