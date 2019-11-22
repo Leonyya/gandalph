@@ -41,4 +41,5 @@ Please make sure to update tests as appropriate.
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
 ## Live demo environment
-[hangoutmybrowser-5nt099km8.now.sh]
+Not available
+
