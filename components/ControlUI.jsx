@@ -8,7 +8,7 @@ import { EEXIST } from 'constants'
 class ControlUI extends Component {
   static async getInitialProps({Component, ctx}) {
     const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {}
-    return {pageProps}
+    return { pageProps }
   }
   constructor(props) {
     super(props)

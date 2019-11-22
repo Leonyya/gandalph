@@ -1,8 +1,7 @@
 # Hangoutmybrowser
 ![Alt text](/crash.png?raw=true)
 
-Hangoutmybrowser is a demo for mqtt architecture based botnet aiming to browser and IoT targets.
-In dev process, nor the architecture and the main functionality are available
+Hangoutmybrowser is a demo for mqtt architecture based botnet aiming to browser and IoT targets. In dev process, either the architecture nor the main functionality are available
 ## Installation
 From yarn manager
 ```bash
