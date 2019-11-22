@@ -18,7 +18,8 @@
 # misc
 .DS_Store
 .env*
-
+.firebase/*
+.firebaserc*
 # debug
 yarn.lock*
 npm-debug.log*
