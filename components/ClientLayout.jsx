@@ -1,14 +1,15 @@
 import { Component } from 'react'
 import { connect } from 'react-redux'
 import { getFoo } from '../redux/selector'
+import mapIcon from '../static/maps.png'
+
 class ClientLayout extends Component {
-  static getInitialProps({store}) {
-    store.dispatch({type: 'FOO', payload: 'bar'})
-  }  
+
   constructor(props) {
     super(props)
     this.state = {
-      clients: {}
+      clients: {},
+      foo: this.props.foo
     }
     this.computeForClient = this.computeForClient.bind(this)
   }
@@ -32,7 +33,7 @@ class ClientLayout extends Component {
   render(){
     return (
       <div>
-        { this.props.foo } 
+      { this.state.foo }
         <table class="table">
           <thead>
             <tr>
@@ -45,19 +46,29 @@ class ClientLayout extends Component {
             { this.computeForClient().map( (client) => ( <Client obj={client}/> ))}
           </tbody>
         </table>
-
       </div>
+
     )
   }
 
 }
 
-const Client = (props) => (
-    <tr>
-      <th scope="row"> { Object.keys(props.obj).toString() } </th>
-      <td> { props.obj[Object.keys(props.obj).toString()].browser } </td>
-      <td> { props.obj[Object.keys(props.obj).toString()].geo.toString()} </td>
-    </tr>
-)
+class Client extends Component {
+  constructor(props) {
+    super(props)
+    this.handleMapClick = this.handleMapClick.bind(this)
+  }
+  handleMapClick() {
+  }
+  render() {
+    return (
+      <tr>
+        <th scope="row"> { Object.keys(this.props.obj).toString() } </th>
+        <td> { this.props.obj[Object.keys(this.props.obj).toString()].browser } </td>
+        <td><img src={mapIcon} onClick={this.handleMapClick}/> </td>
+      </tr>
+    )
+  }
+}
 
-export default connect(state => ({ cl: getFoo }))(ClientLayout)
+export default connect(getFoo)(ClientLayout)

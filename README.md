@@ -20,12 +20,15 @@ FIREBASE_PROJECTID = your-domain
 FIREBASE_STORAGEBUCKET = "your-bucket"
 FIREBASE_MESSAGINGSENDERID = 0000000000000
 FIREBASE_APPID = 0:0000000000000:web:0000aaa00000a0a0
+```
 
 ## Usage
 Build the next project
+
 ```bash
-$ yarn build 
+$ yarn start
 ```
+
 Start in prod mode
 ```bash
 $ yarn start

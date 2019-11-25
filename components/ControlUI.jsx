@@ -3,8 +3,7 @@ import { db , auth } from '../firebase/firebase'
 import ClientLayout from './ClientLayout'
 import { connect } from 'react-redux'
 import { addFoo } from '../redux/actions'
-import { EEXIST } from 'constants'
-
+import { TwitterPicker } from 'react-color'
 class ControlUI extends Component {
   static async getInitialProps({Component, ctx}) {
     const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {}
@@ -71,19 +70,13 @@ class ControlUI extends Component {
               <div className="card-body">
                 <label> Toggle beetwen background colors </label><br/>
                 <div className="btn-group btn-group-toggle" data-toggle="buttons">
-                  <label className="btn btn-secondary active">
-                    <input type="radio" name="options" id="option1" autocomplete="off" checked /> On
-                  </label>
-                  <label className="btn btn-secondary">
-                    <input type="radio" name="options" id="option2" autocomplete="off" /> Off
-                  </label>
+                  <TwitterPicker />  
                 </div>
                 <br/><label>Send a message to the selected client</label>
                 <form onSubmit={this.handleSubMsg}><input type="text" onChange={this.handleChangeMsg} className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter message"/>
                 <br/><small id="emailHelp" className="form-text text-muted">The message will be received instantly</small>
                 <br/><input type="submit" className="btn btn-success" value="Send"/></form>
                 <br/><input type="button" onClick={this.handleRxClick} className="btn btn-secondary" value="Muerdete"/>
-      
               </div>
             </div>
           </div>

@@ -2,7 +2,8 @@ const { parsed: localEnv } = require('dotenv').config()
 const webpack = require('webpack')
 const withProgressBar = require('next-progressbar')
 const withSass = require('@zeit/next-sass')
-module.exports = withProgressBar({
+const withImages =  require('next-images')
+module.exports = withProgressBar(withImages({
   progressBar: {
     profile:true
   },
@@ -21,4 +22,4 @@ module.exports = withProgressBar({
     }
   },
 //  ...withSass()
-})
+}))
