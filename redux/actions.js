@@ -1,8 +1,8 @@
 import { FOO, BAR } from './types'
 
-export const addFoo = () => ({
+export const addFoo = (uid) => ({
     type: FOO,
-    payload: 'foo'
+    payload: uid
 })
 
 export const addBar = () => ({

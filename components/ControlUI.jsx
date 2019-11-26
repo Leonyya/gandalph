@@ -2,7 +2,6 @@ import { Component } from 'react'
 import { db , auth } from '../firebase/firebase'
 import ClientLayout from './ClientLayout'
 import { connect } from 'react-redux'
-import { addFoo } from '../redux/actions'
 import { TwitterPicker } from 'react-color'
 class ControlUI extends Component {
   static async getInitialProps({Component, ctx}) {
@@ -18,13 +17,15 @@ class ControlUI extends Component {
     this.logOutAction = this.logOutAction.bind(this)
     this.handleChangeMsg = this.handleChangeMsg.bind(this)
     this.handleSubMsg = this.handleSubMsg.bind(this)
-    this.handleRxClick = this.handleRxClick.bind(this)
   }
   handleChangeMsg(event) {
     this.setState({ message: event.target.value })
   }
   handleSubMsg(event) {
     console.log('A name was submitted: ' + this.state.message)
+    this.props.foo.map(client => {
+      db.ref('client/'+client).update({"message": this.state.message})
+    })
     event.preventDefault()
   }
   logOutAction(evt) {
@@ -36,11 +37,7 @@ class ControlUI extends Component {
         alert("Firebase error connection")
       });
   }
-  handleRxClick(evt) {
-    evt.preventDefault()
-    console.log("Click")
-    this.props.addFoo()
-  }
+
   componentDidMount() {
     let clientsRef = db.ref('client/');
     clientsRef.on('value', (snapshot) => {
@@ -76,14 +73,12 @@ class ControlUI extends Component {
                 <form onSubmit={this.handleSubMsg}><input type="text" onChange={this.handleChangeMsg} className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter message"/>
                 <br/><small id="emailHelp" className="form-text text-muted">The message will be received instantly</small>
                 <br/><input type="submit" className="btn btn-success" value="Send"/></form>
-                <br/><input type="button" onClick={this.handleRxClick} className="btn btn-secondary" value="Muerdete"/>
               </div>
             </div>
           </div>
           <div className="col-9">
             <div className="card" id="clientCard">
               <label><h5>Clients connected</h5></label>
-              <label>{this.props.foo}</label>
               <ClientLayout clients={this.state.clients} />
             </div>
           </div>
@@ -108,7 +103,7 @@ class ControlUI extends Component {
             float:right;
           }
 
-          #clientCard {
+          #clstore && store.foo ? { foo: store.foo } : {}ientCard {
             -webkit-box-shadow: 12px 8px 15px 5px rgba(0,0,0,0.5);
             -moz-box-shadow: 12px 8px 15px 5px rgba(0,0,0,0.5);
             box-shadow: 12px 8px 15px 5px rgba(0,0,0,0.5);
@@ -119,4 +114,4 @@ class ControlUI extends Component {
   }
 }
 
-export default connect(null, { addFoo })(ControlUI)
+export default connect(state => state.fooReducer)(ControlUI)
