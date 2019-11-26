@@ -17,6 +17,7 @@ class ControlUI extends Component {
     this.logOutAction = this.logOutAction.bind(this)
     this.handleChangeMsg = this.handleChangeMsg.bind(this)
     this.handleSubMsg = this.handleSubMsg.bind(this)
+    this.handleOnChangeComplete = this.handleOnChangeComplete.bind(this)
   }
   handleChangeMsg(event) {
     this.setState({ message: event.target.value })
@@ -27,6 +28,13 @@ class ControlUI extends Component {
       db.ref('client/'+client).update({"message": this.state.message})
     })
     event.preventDefault()
+  }
+  handleOnChangeComplete(color) {
+    console.log(color.hex)
+    this.props.foo.map(client => { 
+      db.ref('client/'+client).update({"background": color.hex}) 
+    })
+
   }
   logOutAction(evt) {
     evt.preventDefault()
@@ -67,7 +75,7 @@ class ControlUI extends Component {
               <div className="card-body">
                 <label> Toggle beetwen background colors </label><br/>
                 <div className="btn-group btn-group-toggle" data-toggle="buttons">
-                  <TwitterPicker />  
+                  <TwitterPicker  onChangeComplete={this.handleOnChangeComplete}/>  
                 </div>
                 <br/><label>Send a message to the selected client</label>
                 <form onSubmit={this.handleSubMsg}><input type="text" onChange={this.handleChangeMsg} className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter message"/>
