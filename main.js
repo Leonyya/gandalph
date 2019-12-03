@@ -4,8 +4,6 @@ const express = require('express')
 const { exec } = require('child_process');
 const next = require('next')
 
-
-
 if( process.argv[2] && process.argv[2] == "dev") {  
 
     const dev = process.env.NODE_ENV !== 'production'
