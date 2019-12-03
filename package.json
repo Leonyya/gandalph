@@ -16,6 +16,7 @@
     "express": "^4.17.1",
     "firebase": "^6.3.3",
     "google-maps-react": "^2.0.2",
+    "mosca": "^2.8.3",
     "mqtt": "^3.0.0",
     "next": "9.0.2",
     "next-images": "^1.2.0",
@@ -33,6 +34,7 @@
     "socket.io-client": "^2.2.0"
   },
   "devDependencies": {
+    "blessed": "^0.1.81",
     "dotenv": "^8.0.0",
     "next-progressbar": "^1.0.0",
     "nodemon": "^1.19.1",
