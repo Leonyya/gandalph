@@ -1,17 +1,41 @@
 import { Component } from 'react'
 import { db , auth } from '../firebase/firebase'
-
-const Client = ({ props }) => this.props.uid
-
+import ClientLayout from './ClientLayout'
+import { connect } from 'react-redux'
+import { TwitterPicker } from 'react-color'
 class ControlUI extends Component {
+  static async getInitialProps({Component, ctx}) {
+    const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {}
+    return { pageProps }
+  }
   constructor(props) {
     super(props)
     this.state = {
-      clients: ''
+      clients: {},
+      message: ''
     }
     this.logOutAction = this.logOutAction.bind(this)
+    this.handleChangeMsg = this.handleChangeMsg.bind(this)
+    this.handleSubMsg = this.handleSubMsg.bind(this)
+    this.handleOnChangeComplete = this.handleOnChangeComplete.bind(this)
   }
+  handleChangeMsg(event) {
+    this.setState({ message: event.target.value })
+  }
+  handleSubMsg(event) {
+    console.log('A name was submitted: ' + this.state.message)
+    this.props.foo.map(client => {
+      db.ref('client/'+client).update({"message": this.state.message})
+    })
+    event.preventDefault()
+  }
+  handleOnChangeComplete(color) {
+    console.log(color.hex)
+    this.props.foo.map(client => { 
+      db.ref('client/'+client).update({"background": color.hex}) 
+    })
 
+  }
   logOutAction(evt) {
     evt.preventDefault()
     auth.signOut()
@@ -21,15 +45,17 @@ class ControlUI extends Component {
         alert("Firebase error connection")
       });
   }
+
   componentDidMount() {
     let clientsRef = db.ref('client/');
     clientsRef.on('value', (snapshot) => {
-      this.setState({ clients: snapshot.val() })
+      const clientes = snapshot.val()
+      // for(let client in clientes) {
+      //   this.setState(state => state.clients.push(clientes[client]))
+      // }
+      this.setState({ clients: clientes })
     });
   }
-
-
-
   render() {
     return (
       <div className="container-fluid">
@@ -44,30 +70,24 @@ class ControlUI extends Component {
           </div>
         </div>
         <div className="row" id="content">
-          <div className="col-4">
+          <div className="col-3">
             <div className="card">
               <div className="card-body">
                 <label> Toggle beetwen background colors </label><br/>
                 <div className="btn-group btn-group-toggle" data-toggle="buttons">
-                  <label className="btn btn-secondary active">
-                    <input type="radio" name="options" id="option1" autocomplete="off" checked /> On
-                  </label>
-                  <label className="btn btn-secondary">
-                    <input type="radio" name="options" id="option2" autocomplete="off" /> Off
-                  </label>
+                  <TwitterPicker  onChangeComplete={this.handleOnChangeComplete}/>  
                 </div>
                 <br/><label>Send a message to the selected client</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter message"/>
-                <br/><small id="emailHelp" class="form-text text-muted">The message will be received instantly</small>
-                <br/><input type="button" className="btn btn-success" value="Send"/>
+                <form onSubmit={this.handleSubMsg}><input type="text" onChange={this.handleChangeMsg} className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter message"/>
+                <br/><small id="emailHelp" className="form-text text-muted">The message will be received instantly</small>
+                <br/><input type="submit" className="btn btn-success" value="Send"/></form>
               </div>
             </div>
           </div>
-          <div className="col-8">
-            <div className="card">
-            {
-              this.state.clients.toString()
-            }
+          <div className="col-9">
+            <div className="card" id="clientCard">
+              <label><h5>Clients connected</h5></label>
+              <ClientLayout clients={this.state.clients} />
             </div>
           </div>
         </div>
@@ -82,19 +102,24 @@ class ControlUI extends Component {
 
           #content {
             margin-top:4px;
-            background-color: #737373;
+            background: rgba(255,255,255,.15);
             padding:10px;
-            margin-right:1px;
-            margin-left:1px;
           }
 
           .logoutbutton {
             margin-top: 5px;
             float:right;
           }
+
+          #clstore && store.foo ? { foo: store.foo } : {}ientCard {
+            -webkit-box-shadow: 12px 8px 15px 5px rgba(0,0,0,0.5);
+            -moz-box-shadow: 12px 8px 15px 5px rgba(0,0,0,0.5);
+            box-shadow: 12px 8px 15px 5px rgba(0,0,0,0.5);
+          }
         `}</style>
       </div>
     )
   }
 }
-export default ControlUI
+
+export default connect(state => state.fooReducer)(ControlUI)

@@ -30,17 +30,17 @@ class AdminLogin extends Component {
                 <h5 className="card-title">Hangoutmybrowser control panel</h5>
                 <form>
                   <div className="form-group">
-                    <label for="exampleInputEmail1">Email address</label>
+                    <label>Email address</label>
                     <input type="email" onChange={(evt) => this.setState({email:evt.target.value})} className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email"/>
                     <small id="emailHelp" className="form-text text-muted">Only privilege people got access</small>
                   </div>
                   <div className="form-group">
-                    <label for="exampleInputPassword1">Password</label>
+                    <label>Password</label>
                     <input type="password" onChange={(evt) => this.setState({passwd:evt.target.value})}className="form-control" id="exampleInputPassword1" placeholder="Password"/>
                   </div>
                   <div className="form-group form-check">
                     <input type="checkbox" className="form-check-input" id="exampleCheck1"/>
-                    <label className="form-check-label" for="exampleCheck1">Remember me</label>
+                    <label className="form-check-label">Remember me</label>
                   </div>
                   <button type="button" onClick={this.onSub} className="btn btn-primary">Log in</button>
                 </form>
