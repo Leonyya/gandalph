@@ -8,7 +8,8 @@ class Home extends Component {
 		this.state = {
 			name: 'I think you got the wrong address',
 			message:'',
-			bgcolor: ''
+			stl: {},
+			isFull: true
 		}
 	}
 	static getInitialProps({store, isServer, pathname,query}) {
@@ -30,27 +31,36 @@ class Home extends Component {
 				txt += navigator.userAgent
 				if(navigator.geolocation) {
 					navigator.geolocation.getCurrentPosition((pos) => {
-						let geo = 'Latitude: '+pos.coords.latitude+' Longitude: '+pos.coords.longitude
+						let geo = { 'lat': pos.coords.latitude, 'lng': pos.coords.longitude }
 						db.ref('client/'+uid).set({
 							browser: txt,
 							geo: geo,
-							message: 'Bienvenido'
+							message: 'Bienvenido',
+							background:'#ffffff'
 						})
 					})
 				} else {
 					db.ref('client/'+uid).set({
 						browser: txt,
-						geo: 'not available'
+						geo: 'not available',
+						message: 'Bienvenido',
+						background:'#ffffff'
 					})
 				}
 				let userRef = db.ref('client/'+uid+'/message')
 				userRef.on('value', (snapshot) => {
-		      this.setState({message: snapshot.val()})
-		    });
+		      		this.setState({message: snapshot.val()})
+				});
+				let bgUserRef = db.ref('client/'+uid+'/background')
+				bgUserRef.on('value', (snapshot) => {
+					this.setState({stl: { background : snapshot.val()}})
+				})
       } else {
 				alert("error")
       }
-    })
+	})
+	
+
 	}
 
 	componentWillUnmount () {
@@ -59,25 +69,24 @@ class Home extends Component {
 
 	render () {
 		return (
-			<section className={"section " + this.state.bgcolor}>
-			<div className="container">
-
-				<h1>{this.state.name}</h1>
-				<img src="/static/crash.png"/>
-				{this.state.message}
-			</div>
-			<style jsx global>{`
-					black {
-						background-color:black;
-						color:white;
-						text-align:center;
-					}
-					white {
-						background-color:white;
-						color:black;
-					}
-			`}</style>
-			</section>
+				<section className="client" style={this.state.stl}>
+				<div className="container">
+					<div className="row">
+						<div className="col">
+							<h1>{this.state.name}</h1>
+							<img src="/static/crash.png" width="400px" height="350px"/><br/>
+							<h3>{this.state.message}</h3>
+						</div>
+					</div>
+				</div>
+				<style jsx global>{`
+						client {
+							background-color:white;
+							color:black;
+							text-align:center;
+						}
+				`}</style>
+				</section>
 		)
 	}
 }

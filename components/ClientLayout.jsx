@@ -1,14 +1,14 @@
 import { Component } from 'react'
-import { connect } from 'react-redux'
-import { getFoo } from '../redux/selector'
+import Client from './Client'
 class ClientLayout extends Component {
-  static getInitialProps({store}) {
-    store.dispatch({type: 'FOO', payload: 'bar'})
-  }  
+  static async getInitialProps(ctx) {
+    const { store } = ctx
+    return {}
+  }
   constructor(props) {
     super(props)
     this.state = {
-      clients: {}
+      clients: {},
     }
     this.computeForClient = this.computeForClient.bind(this)
   }
@@ -32,32 +32,26 @@ class ClientLayout extends Component {
   render(){
     return (
       <div>
-        { this.props.foo } 
-        <table class="table">
+        <table className="table">
           <thead>
             <tr>
+              <th></th>
               <th scope="col"> UID </th>
               <th scope="col"> Browser </th>
               <th scope="col"> Geolocation </th>
             </tr>
           </thead>
           <tbody>
-            { this.computeForClient().map( (client) => ( <Client obj={client}/> ))}
+            { this.computeForClient().map( (client, index) => ( <Client obj={client} key={index}/> ))}
           </tbody>
         </table>
-
       </div>
+
     )
   }
 
 }
 
-const Client = (props) => (
-    <tr>
-      <th scope="row"> { Object.keys(props.obj).toString() } </th>
-      <td> { props.obj[Object.keys(props.obj).toString()].browser } </td>
-      <td> { props.obj[Object.keys(props.obj).toString()].geo.toString()} </td>
-    </tr>
-)
 
-export default connect(state => ({ cl: getFoo }))(ClientLayout)
+
+export default ClientLayout
