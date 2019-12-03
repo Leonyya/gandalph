@@ -38,6 +38,7 @@
     "dotenv": "^8.0.0",
     "next-progressbar": "^1.0.0",
     "nodemon": "^1.19.1",
+    "redis": "^2.8.0",
     "remote-redux-devtools": "^0.5.16"
   }
 }
