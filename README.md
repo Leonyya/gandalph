@@ -1,7 +1,7 @@
-# Hangoutmybrowser
+# MQBot
 ![Alt text](/crash.png?raw=true)
 
-Hangoutmybrowser is a demo for mqtt architecture based botnet aiming to browser and IoT targets. In dev process, either the architecture nor the main functionality are available
+MQBot is a demo for mqtt architecture based botnet aiming to browser and IoT targets. In dev process, either the architecture nor the main functionality are available
 ## Installation
 From yarn manager
 ```bash
@@ -20,19 +20,28 @@ FIREBASE_PROJECTID = your-domain
 FIREBASE_STORAGEBUCKET = "your-bucket"
 FIREBASE_MESSAGINGSENDERID = 0000000000000
 FIREBASE_APPID = 0:0000000000000:web:0000aaa00000a0a0
+GOOGLE_MAPS_KEY = [avaiable at Google Cloud > API and Services > Credentials]
 ```
+After importing your environment variables you should get the corresponding redis image:
+We use REDIS as broker for persistance, in-memory cache and quick setup
+```bash
+$ docker run --name container-name -p 6379:6379 -d redis redis-server --appendonly yes
+```
+Is important for the docker instance to expose exactly the 6379 port, name it whatever you want
 
 ## Usage
-Build the next project
-
+After installing all the dependencies, if everything installed just fine, you could run 
 ```bash
-$ yarn start
+$ node main
 ```
+For production instance, this will start the API which will connect to the Redis container, and build the nextjs project and serve it with the same framework making it available at
+http://localhost:3000/
 
-Start in prod mode
+If you want to export the webapp client you could do
 ```bash
-$ yarn start
+$ yarn export
 ```
+This will create static files of the Progressive Web Application in out/ folder, then you can setup your hosting and this will connect to your local message broker every time. (Broken, host and port configuration not yet)
 
 
 ## Contributing
