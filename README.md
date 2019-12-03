@@ -43,6 +43,12 @@ $ yarn export
 ```
 This will create static files of the Progressive Web Application in out/ folder, then you can setup your hosting and this will connect to your local message broker every time. (Broken, host and port configuration not yet)
 
+### Development setup
+You'll need nodemon, if you have it installed this should work:
+$ nodemon main dev
+
+This will start the project over a development server that will hot reload on every source file change. If the change is in the wapp client it will not restart the message broker, if the change is over API, or main file this will restart the entire project, so be careful because ephemeral data will be destroyed.
+
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
