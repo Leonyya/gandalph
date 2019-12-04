@@ -3,7 +3,7 @@ const blessed = require('blessed')
 const express = require('express')
 const { exec } = require('child_process');
 const next = require('next')
-
+// Restart
 if( process.argv[2] && process.argv[2] == "dev") {  
 
     const dev = process.env.NODE_ENV !== 'production'
@@ -75,8 +75,12 @@ server.on('clientConnected', function(client) {
 })
 
 server.on('published', function(packet, client){
-    console.log('Published', packet.topic, packet.payload)
+    console.log('Published', packet.topic, packet.payload.toString())
 })
+
+server.on('clientDisconnected', function(client) {
+    console.log('Client Disconnected:', client.id);
+});
 
 
 
