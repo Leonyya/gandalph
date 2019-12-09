@@ -48,8 +48,10 @@ This will create static files of the Progressive Web Application in out/ folder,
 
 ### Development setup
 You'll need nodemon, if you have it installed this should work:
-$ nodemon main dev
 
+```bash
+$ nodemon main dev
+```
 This will start the project over a development server that will hot reload on every source file change. If the change is in the wapp client it will not restart the message broker, if the change is over API, or main file this will restart the entire project, so be careful because ephemeral data will be destroyed.
 
 
