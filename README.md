@@ -1,7 +1,10 @@
 # MQBot
 ![Alt text](/crash.png?raw=true)
 
-MQBot is a demo for mqtt architecture based botnet aiming to browser and IoT targets. In dev process, either the architecture nor the main functionality are available
+MQBot is a mqtt architecture based botnet aiming to IoT targets, for now supported Android .apk payload, obfuscated JS payload, DLL payload, and Arduino+OBD-II bridge for Vehicle hardware telemetry
+
+![Alt text](/architecture-diagram.png?raw=true)
+
 ## Installation
 From yarn manager
 ```bash
