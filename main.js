@@ -9,7 +9,7 @@ if( process.argv[2] && process.argv[2] == "dev") {
     const dev = process.env.NODE_ENV !== 'production'
     const app = next({ dev })
     const handle = app.getRequestHandler()
-
+    
     app.prepare()
     .then(() => {
       const server = express()
@@ -64,8 +64,22 @@ let moscaSettings = {
     backend: ascoltatore,
 }
 
+const authenticate = (client,username,password, callback) => {
+    let authorized = (username === 'alice' && password.toString() === 'secret')
+    if(authorized) client.user = username
+    callback(null,authorized)
+}
+const authorizePublish = (client, topic, payload, callback) => {
+    callback(null, client.user == topic.split('/')[1])
+}
+const authorizeSuscribe = (client, topic, callback) => {
+    callback(null, client.user == topic.split('/')[1])
+}
 let server = new mosca.Server(moscaSettings)
 server.on('ready', ()=> {
+    server.authenticate = authenticate
+    server.authorizePublish = authorizePublish
+    server.authorizeSuscribe = authorizeSuscribe
     console.log('> MQTT broker is ready at ::1883')
 })
 
@@ -81,6 +95,8 @@ server.on('published', function(packet, client){
 server.on('clientDisconnected', function(client) {
     console.log('Client Disconnected:', client.id);
 });
+
+
 
 
 
