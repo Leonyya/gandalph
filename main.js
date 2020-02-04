@@ -1,10 +1,56 @@
-const mosca = require('mosca')
-const blessed = require('blessed')
 const express = require('express')
-const { exec } = require('child_process');
+//const { exec } = require('child_process')
+const aedes = require('aedes')()
 const next = require('next')
-// Restart
-if( process.argv[2] && process.argv[2] == "dev") {  
+const ws = require('websocket-stream')
+const webpack = require('webpack')
+const path = require('path')
+const { exec } = require('pkg')
+
+
+async function pkgBuildExe(packet, cb) {
+    await exec([ 'builder/desktop/src/index.js', '--target', 'host', '--output', 'builder/desktop/build/bin/app' ])
+
+
+/*    webpack({
+        entry: [
+            'regenerator-runtime/runtime',
+            './builder/desktop/src/index.js'
+          ],
+          target: 'node',
+          devtool: 'source-map',
+          output: {
+              path: path.resolve(__dirname, '/builder/desktop/build/js'),
+              filename: 'bundle.js'
+          },
+          module: {
+              rules: [
+                  {
+                    use: [ 
+                        {
+                            loader: 'babel-loader',
+                            options: {
+                                presets: [ '@babel/preset-env' ]
+                            }
+                        }
+                    ],
+                    exclude: /(node_modules)/,
+                    test: /\.js$/,
+
+                  }
+              ]
+          }
+    }, (err, stats) => {
+        process.stdout.write(stats.toString() + '\n');
+        if(err || stats.hasErrors()) {
+            console.log('error building')
+        }
+    })
+*/
+}
+pkgBuildExe()
+
+/*if( process.argv[2] && process.argv[2] == "dev") {  
 
     const dev = process.env.NODE_ENV !== 'production'
     const app = next({ dev })
@@ -49,55 +95,32 @@ if( process.argv[2] && process.argv[2] == "dev") {
       })
     });
 }
+*/ 
+// Aedes broker startup
+const server = require('net').createServer(aedes.handle)
+const port = 1883
+const wsPort = 8888
 
-let ascoltatore = {
-    type: 'redis',
-    redis: require('redis'),
-    db: 12,
-    port: 6379,
-    return_buffers: true,
-    host: "localhost"
-}
-
-let moscaSettings = {
-    port: 1883,
-    backend: ascoltatore,
-}
-
-const authenticate = (client,username,password, callback) => {
-    let authorized = (username === 'alice' && password.toString() === 'secret')
-    if(authorized) client.user = username
-    callback(null,authorized)
-}
-const authorizePublish = (client, topic, payload, callback) => {
-    callback(null, client.user == topic.split('/')[1])
-}
-const authorizeSuscribe = (client, topic, callback) => {
-    callback(null, client.user == topic.split('/')[1])
-}
-let server = new mosca.Server(moscaSettings)
-server.on('ready', ()=> {
-    server.authenticate = authenticate
-    server.authorizePublish = authorizePublish
-    server.authorizeSuscribe = authorizeSuscribe
-    console.log('> MQTT broker is ready at ::1883')
+ws.createServer({
+    server: server
+}, aedes.handle)
+server.listen(wsPort, function() {
+    console.log('> MQTT broker up on port ', port)
 })
-
-
-server.on('clientConnected', function(client) {
-    console.log('client connected', client.id)
+aedes.on('client', (client) => {
+    console.log('new client', client.id)
 })
-
-server.on('published', function(packet, client){
-    console.log('Published', packet.topic, packet.payload.toString())
+aedes.on('clientError', function (client, err) {
+    console.log('client error', client.id, err.message, err.stack)
 })
+/*aedes.authenticate = (client, username, password, callback) => {
+    if(username == 'matteo' && password == '1234') {
+        callback(null, true)
+    } else {
+        let error = new Error('Auth error')
+        error.returnCode = 1
+        callback(error,null)
+    }
+}*/
 
-server.on('clientDisconnected', function(client) {
-    console.log('Client Disconnected:', client.id);
-});
-
-
-
-
-
-
+// aedes.subscribe('buildexe', pkgBuildExe(packet, cb), done)
