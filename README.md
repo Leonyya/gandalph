@@ -1,8 +1,17 @@
 # MQBot
 ![Alt text](/crash.png?raw=true)
 
-MQBot is a mqtt architecture based botnet aiming to IoT targets, for now supported Android .apk payload, obfuscated JS payload, DLL payload, and Arduino+OBD-II bridge for Vehicle hardware telemetry
+MQBot is MQTT architecture based botnet (Proof Of Concept) with the following and unique in the world features. 
 
+The botmaster client runs in every browser existent, and you could upload your client UI to a server and do cross-requests to the core message broker of the botnet. The bot builder compiles to Mac, Linux, Windows, APK and iOS. 
+
+- Telemetry of connected bots in QoS 1 and 2
+- JS scripting inside the bot.
+- JS module upload in-the-wild.
+- Cross-platform
+- Migrate to other message broker core in-the-wild
+
+You could literally do everything with this open source bot by uploading the corresponding .js files to the connected bots and it will run the scripts in it's integrated VM.
 ![Alt text](/architecture-diagram.png?raw=true)
 
 ## Installation
@@ -32,6 +41,7 @@ $ docker run --name container-name -p 6379:6379 -d redis redis-server --appendon
 ```
 Is important for the docker instance to expose exactly the 6379 port, name it whatever you want
 
+So now this should work only with yarn install without any other dependencies and cloud-free.
 ## Usage
 After installing all the dependencies, if everything installed just fine, you could run 
 ```bash
