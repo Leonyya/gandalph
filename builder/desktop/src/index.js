@@ -1,6 +1,7 @@
-var mqtt = require('mqtt')
+const mqtt = require('mqtt')
+const memoryjs = require('memoryjs')
+
 var client  = mqtt.connect('mqtt://localhost:8888')
- 
 client.on('connect', function () {
   client.subscribe('presence', function (err) {
     if (!err) {
