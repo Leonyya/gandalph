@@ -26,3 +26,8 @@ yarn.lock
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.next/
+#compiler output
+/builder/desktop/build/bin/*
+/builder/desktop/build/js/*
+/builder/mobile/build/bin/*
