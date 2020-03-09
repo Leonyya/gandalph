@@ -3,14 +3,14 @@ import mqtt from 'mqtt'
 class MQ extends Component {
     constructor(props) {
         super(props)
-        let client = mqtt.connect('mqtt://localhost:8888', {
-            username: 'matteoe',
-            password: '1234'
-        })
+        let client = mqtt.connect('mqtt://localhost:8888')
         client.on('connect', ()=> {
-            console.log('connected')
+            client.subscribe('sonde', () => {
+                client.publish('sonde', 'First connection browser')
+            })
         })
-        client.publish('buildexe', '127.0.0.1')
+
+        
     }
     render() {
         return (
