@@ -42,7 +42,7 @@
   "devDependencies": {
     "aedes": "^0.40.1",
     "dotenv": "^8.0.0",
-    "jquery": "^1.9.1-3",
+    "jquery": "^3.4.1",
     "next-progressbar": "^1.0.0",
     "node-sass": "^4.7.2",
     "nodemon": "^1.19.1",
