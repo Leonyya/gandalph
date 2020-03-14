@@ -3,7 +3,9 @@ const webpack = require('webpack')
 const withProgressBar = require('next-progressbar')
 const withSass = require('@zeit/next-sass')
 const withImages =  require('next-images')
-module.exports = withProgressBar(withImages({
+const withCSS = require('@zeit/next-css')
+
+module.exports = withProgressBar(withCSS(withImages({
   progressBar: {
     profile:true
   },
@@ -22,4 +24,4 @@ module.exports = withProgressBar(withImages({
     }
   },
 //  ...withSass()
-}))
+})))
