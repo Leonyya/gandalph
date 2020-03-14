@@ -1,6 +1,5 @@
 import { FOO, BAR, authenticate } from './types'
 import mqtt from 'mqtt'
-
 export const addFoo = (uid) => ({
     type: FOO,
     payload: uid
@@ -13,17 +12,29 @@ export const addBar = () => ({
 
 export const auth = (p) => {
     try {
-        let client = mqtt.connect('ws://localhost:8888', {
+        console.log(p)
+        let client = mqtt.connect('mqtt://localhost:8888', {
             username: p.username,
             password: p.password
         })
+        //let client = new Paho.Client("mqtt://localhost",/* Number(8888), "/", "clientId"*/)
+        client.on(
+            'connect',
+            (message) => {
+                console.log(`${new Date().toLocaleString()} connected to broker`)
+                client.subscribe('sonde')
+                client.publish('sonde', 'Connected from browser')
+            }
+        )
 
-        client.on('connect', ()=> {
-            client.subscribe('sonde', () => {
-                client.publish('sonde', 'Redux logged in saukzesfuly')
-            })
-        })
+        client.on(
+            'message',
+            (topic, message) => {
+                console.log(`Message received on topic ${topic}: ${message.toString()}`)
+            }
+        )
     } catch(e){
+        console.error(e)
         return {
             type: authenticate,
             payload: {

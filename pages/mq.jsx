@@ -1,17 +1,21 @@
 import { Component } from 'react'
 import { auth } from '../redux/actions'
 import { connect } from 'react-redux'
+import ScriptPanel from '../components/ScriptPanel'
 class AdminLogin extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      email: '',
+      email: 'hh@gg.kk',
       passwd: ''
     }
     this.onSub = this.onSub.bind(this)
   }
   onSub(evt) {
-    alert(this.state.email+' '+this.state.passwd)
+    this.props.dispatch(auth({
+      username: this.state.email, 
+      password: this.state.passwd}))
+    evt.preventDefault() 
   }
   render() {
     return (
@@ -50,6 +54,14 @@ class AdminLogin extends Component {
   }
 }
 
+const _connectedAdminLogin = connect()(AdminLogin)
+function mapStateToProps(state, ownProps) {
+  console.log(state.authReducer.isLogged)
+  return {
+    isLogged: state.authReducer.isLogged
+  }
+}
+
 class AdminPanel extends Component {
     static async getInitialProps({Component, ctx}) {
         const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {}
@@ -58,14 +70,15 @@ class AdminPanel extends Component {
     constructor(props) {
         super(props)
     }
-
+    
     render() {
         return (
             <div>
-                <AdminLogin/> 
+                
+                {this.props.isLogged ? <ScriptPanel/> : <_connectedAdminLogin/> }
             </div>
         )
     }
 }
 
-export default connect(null, { auth })(AdminPanel)
+export default connect(mapStateToProps)(AdminPanel)
