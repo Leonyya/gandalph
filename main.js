@@ -1,126 +1,98 @@
 const express = require('express')
-//const { exec } = require('child_process')
-const aedes = require('aedes')()
+const { exec } = require('child_process')
 const next = require('next')
-const ws = require('websocket-stream')
 const webpack = require('webpack')
 const path = require('path')
-const { exec } = require('pkg')
+const BuildDesktopPayload = require('./lib/build/BuildDesktopPayload')
 
+// NextJS init 
+const dev = process.env.NODE_ENV !== 'production'
+const app = next({ dev })
+const handle = app.getRequestHandler()
 
-async function pkgBuildExe(packet, cb) {
-    await exec([ 'builder/desktop/src/index.js', '--target', 'host', '--output', 'builder/desktop/build/bin/app' ])
+// helper function to log date+text to console:
+const log = (text) => {
+    console.log(`[${new Date().toLocaleString()}] ${text}`)
+  }
 
-
-/*    webpack({
-        entry: [
-            'regenerator-runtime/runtime',
-            './builder/desktop/src/index.js'
-          ],
-          target: 'node',
-          devtool: 'source-map',
-          output: {
-              path: path.resolve(__dirname, '/builder/desktop/build/js'),
-              filename: 'bundle.js'
-          },
-          module: {
-              rules: [
-                  {
-                    use: [ 
-                        {
-                            loader: 'babel-loader',
-                            options: {
-                                presets: [ '@babel/preset-env' ]
-                            }
-                        }
-                    ],
-                    exclude: /(node_modules)/,
-                    test: /\.js$/,
-
-                  }
-              ]
-          }
-    }, (err, stats) => {
-        process.stdout.write(stats.toString() + '\n');
-        if(err || stats.hasErrors()) {
-            console.log('error building')
-        }
-    })
-*/
-}
-pkgBuildExe()
-
-/*if( process.argv[2] && process.argv[2] == "dev") {  
-
-    const dev = process.env.NODE_ENV !== 'production'
-    const app = next({ dev })
-    const handle = app.getRequestHandler()
-    
-    app.prepare()
-    .then(() => {
-      const server = express()
+BuildDesktopPayload()
+ 
+//
+//  This is the development environment setup, if you wanna go prod, comment 
+//
+app.prepare()
+.then(() => {
+    const server = express()
         
-      server.get('*', (req, res) => {
+    server.get('*', (req, res) => {
         return handle(req, res)
-      })
+    })
         
-      server.listen(3000, (err) => {
-        if (err) throw err
+    server.listen(3000, (err) => {
+    if (err) throw err
         console.log('> Dev server ready on http://localhost:3000')
-      })
     })
-    .catch((ex) => {
-      console.error(ex.stack)
-      process.exit(1)
     })
-} else {
-    exec('npm run build', (err, stdout, stderr) => {
-        if (err) {
-            return
-        }
-    
-        // the *entire* stdout and stderr (buffered)
-        console.log(`${stdout}`)
-        console.log(`stderr: ${stderr}`)
-        console.log('> Client built')
-        console.log('> In a few minuts will become available at http://localhost:3000/')
-    
-        exec('npm run start', (err,stdout,stderr) => {
-            if(err) {
-                return
-            }
-            console.log(`${stdout}`);
-            console.log('> Wapp deployed')
-            console.log(`stderr: ${stderr}`)
-      })
-    });
-}
-*/ 
+.catch((ex) => {
+    console.error(ex.stack)
+    process.exit(1)
+})
+//  this whole section and run ( yarn export OR yarn start )
 // Aedes broker startup
-const server = require('net').createServer(aedes.handle)
-const port = 1883
+const password_gen = require('./lib/password_gen')
+const ws = require('websocket-stream')
+const aedesPersistenceRedis = require('aedes-persistence-redis')
+const persistence = aedesPersistenceRedis({
+    port: 6379,
+    host: '127.0.0.1',
+    family: 4,
+    db: 0,
+    maxSessionDelivery: 100,
+    packetTTL: (packet) => 10
+})
+const aedes = require('aedes')({ persistence: persistence })
+const server = require('http').createServer()
 const wsPort = 8888
+const SecureHash = password_gen(30)
 
 ws.createServer({
     server: server
 }, aedes.handle)
+
 server.listen(wsPort, function() {
-    console.log('> MQTT broker up on port ', port)
+    console.log('> MQTT broker up on port ', wsPort)
+    console.log('> Your secure password, auth with it ', SecureHash )
 })
 aedes.on('client', (client) => {
-    console.log('new client', client.id)
+    let message = `Client ${client.id} just connected from`
+    log(message)
+    aedes.publish({
+        cmd: 'publish',
+        qos: 2,
+        topic: 'sonde',
+        payload: message,
+        retain: false
+    })
 })
 aedes.on('clientError', function (client, err) {
     console.log('client error', client.id, err.message, err.stack)
 })
-/*aedes.authenticate = (client, username, password, callback) => {
-    if(username == 'matteo' && password == '1234') {
-        callback(null, true)
-    } else {
-        let error = new Error('Auth error')
-        error.returnCode = 1
-        callback(error,null)
+
+aedes.on(
+    'clientDisconnect',
+    (client) => {
+        message = `Client ${client.id} just disconnected`
+        log(message)
+        aedes.publish({
+            cmd: 'publish',
+            qos: 2,
+            topic: 'sonde',
+            payload: message,
+            retain: false
+        })
     }
-}*/
+)
+
+aedes.authenticate = (client, username, password, callback) => (password.toLocaleString() === "1234") ? callback(null, true) : callback(null, true)
 
 // aedes.subscribe('buildexe', pkgBuildExe(packet, cb), done)

@@ -1,7 +1,7 @@
 # MQBot
 ![Alt text](/crash.png?raw=true)
 
-MQBot is MQTT architecture based botnet (Proof Of Concept) with the following and unique in the world features. 
+MQBot is MQTT architecture based botnet (Proof Of Concept) with the following and unique features. 
 
 The botmaster client runs in every browser existent, and you could upload your client UI to a server and do cross-requests to the core message broker of the botnet. The bot builder compiles to Mac, Linux, Windows, APK and iOS. 
 
@@ -12,6 +12,15 @@ The botmaster client runs in every browser existent, and you could upload your c
 - Migrate to other message broker core in-the-wild
 
 You could literally do everything with this open source bot by uploading the corresponding .js files to the connected bots and it will run the scripts in it's integrated VM.
+
+The return can be checked in logs panel. There's an integrated lib inside the VM where you code going to execute, that exposes the following WinAPIs:
+ReadProcessMemory
+WriteProcessMemory
+VirtualProtectEx
+VirtualAllocEx
+
+Daemonizing should be possible
+
 ![Alt text](/architecture-diagram.png?raw=true)
 
 ## Installation
