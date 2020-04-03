@@ -1,5 +1,5 @@
 import { Component } from 'react'
-import { db , auth } from '../firebase/firebase'
+import { db } from '../firebase/firebase'
 import ClientLayout from './ClientLayout'
 import { connect } from 'react-redux'
 import { TwitterPicker } from 'react-color'
@@ -38,12 +38,6 @@ class ControlUI extends Component {
   }
   logOutAction(evt) {
     evt.preventDefault()
-    auth.signOut()
-      .then(function() {
-      })
-      .catch(function(error) {
-        alert("Firebase error connection")
-      });
   }
 
   componentDidMount() {
