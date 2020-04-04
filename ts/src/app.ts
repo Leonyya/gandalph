@@ -1,17 +1,20 @@
-const express = require('express')
-const { exec } = require('child_process')
-const next = require('next')
-const webpack = require('webpack')
-const path = require('path')
-const BuildDesktopPayload = require('./lib/build/BuildDesktopPayload')
+import express from 'express'
+import { exec } from 'child_process';
+import next from 'next'
+import webpack from 'webpack'
+import path from 'path'
+import { BuildDesktopPayload } from './BuildDesktopPayload'
+import { generatePassword } from '../password_gen'
+import ws from 'websocket-stream'
+import aedesPersistenceRedis from 'aedes-persistence-redis'
 
 // NextJS init 
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
-const handle = app.getRequestHandler()
+const handle  = app.getRequestHandler()
 
 // helper function to log date+text to console:
-const log = (text) => {
+const log = (text: string) => {
     console.log(`[${new Date().toLocaleString()}] ${text}`)
   }
 
@@ -24,11 +27,11 @@ app.prepare()
 .then(() => {
     const server = express()
         
-    server.get('*', (req, res) => {
+    server.get('*', (req: any, res: any) => {
         return handle(req, res)
     })
         
-    server.listen(3000, (err) => {
+    server.listen(3000, (err: any) => {
     if (err) throw err
         console.log('> Dev server ready on http://localhost:3000')
     })
@@ -37,11 +40,9 @@ app.prepare()
     console.error(ex.stack)
     process.exit(1)
 })
+
 //  this whole section and run ( yarn export OR yarn start )
 // Aedes broker startup
-const password_gen = require('./lib/password_gen')
-const ws = require('websocket-stream')
-const aedesPersistenceRedis = require('aedes-persistence-redis')
 const persistence = aedesPersistenceRedis({
     port: 6379,
     host: '127.0.0.1',
@@ -53,7 +54,7 @@ const persistence = aedesPersistenceRedis({
 const aedes = require('aedes')({ persistence: persistence })
 const server = require('http').createServer()
 const wsPort = 8888
-const SecureHash = password_gen(30)
+const SecureHash = generatePassword(30)
 
 ws.createServer({
     server: server

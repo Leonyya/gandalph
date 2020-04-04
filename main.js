@@ -64,7 +64,7 @@ server.listen(wsPort, function() {
     console.log('> Your secure password, auth with it ', SecureHash )
 })
 aedes.on('client', (client) => {
-    let message = `Client ${client.id} just connected from`
+    let message = `Client ${client.id} just connected`
     log(message)
     aedes.publish({
         cmd: 'publish',
