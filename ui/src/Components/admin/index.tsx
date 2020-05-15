@@ -1,29 +1,30 @@
 import React from 'react'
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import './Admin.sass'
 
 function Admin() {
     return (
-        <div className="container-fluid">
-          <div className="row" id="header">
-            <div className="col">
-              <h3>User Interface   <span className="badge badge-pill badge-warning"> Beta</span></h3>
-            </div>
-            <div className="col">
-              <div className="logoutbutton">
-                <button type="button" className="btn btn-danger">Logout</button>
-              </div>
-            </div>
-          </div>
+      <>
+        <div className="Navigation">
+          
+        </div>
+        <div className="AppBar">
+          <h3>Gandalph   <span className="badge badge-pill badge-warning"></span></h3>
+        </div>
+        <div className="container">
+
           <div className="row" id="content">
-            <div className="col-4">
-              <div className="card">
+            <div className="column">
+              <div>
                   <label><h5>Clients connected</h5></label>
               </div>
             </div>
-            <div className="col-8">
+            <div className="column-66">
               <div className="card" id="clientCard">
                   <div className="card-body">
-                      <label><h4>Inject code</h4></label>
-  
+                      <label><h5>Message Queue log</h5></label>
+                      <textarea placeholder="" name="message_queue_log" id="commentField"></textarea>
+
                       {/*<Editor
                           value="print"
                           onValueChange={code => this.setState({ code: code })}
@@ -33,7 +34,6 @@ function Admin() {
                               fontFamily:'"Fira code", "Fira Mono", monospace',
                               fontSize: 12,
                           }} />*/}
-                      <hr></hr>
                       <label>The return can be checked in logs panel. There's an integrated lib inside the VM where you code going to execute, that exposes the following WinAPIs:
                       <ul>
                           <li>
@@ -59,20 +59,12 @@ function Admin() {
                       &nbsp;<label>Concurrency preference</label>
                       &nbsp;<input type="text"></input>
                       &nbsp;<input type="button" value="Attack"></input>
-                      <hr></hr>
-                      <label><h6>Browser specific controllers</h6></label><br/>
-                      <label> Toggle beetwen background colors </label><br/>
-                      <div className="btn-group btn-group-toggle" data-toggle="buttons">
-                      </div>
-                      <br/><label>Send a message to the selected client</label>
-                      <form><input type="text" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter message"/>
-                      <br/><small id="emailHelp" className="form-text text-muted">The message will be received instantly</small>
-                      <br/><input type="submit" className="btn btn-success" value="Send"/></form>
                   </div>
               </div>
             </div>
           </div>
         </div>
+      </>
     )
 }
 

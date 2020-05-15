@@ -2,3 +2,5 @@ old_ui/*
 old_ui*
 go.sum*
 .gotron/*
+
+*.exe

@@ -1,15 +1,24 @@
-import React, { createContext } from 'react'
-type IState = {
-  authenticated: false
-}
-interface IContextProps {
-  state: IState;
-  dispatch: ({type}:{type:string}) => void;
+import React, { Dispatch, createContext } from 'react'
+export const LoginProvider = () => (<></>)
+
+/*
+interface Actions {
+  type: string,
+  value: any
 }
 
-export const LoginContext = createContext({} as IContextProps)
+interface LoginProviderProps {
+  children: JSX.Element | null
+}
 
-export const LoginProvider = ({children}:any) => {
+interface InitContextProps {
+  state: LoginProviderProps,
+  dispatch: Dispatch<Actions>
+}
+
+export const LoginContext = createContext({} as InitContextProps)
+
+export const LoginProvider:React.FunctionComponent<LoginProviderProps> = ({children}) => {
 
   const defaultContext = {
     authenticated: false,
@@ -25,4 +34,4 @@ export const LoginProvider = ({children}:any) => {
       </>
     </LoginContext.Provider>
   )
-}
+}*/
