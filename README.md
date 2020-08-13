@@ -1,7 +1,7 @@
-# MQBot
+# Gandalph
 ![Alt text](/crash.png?raw=true)
 
-MQBot is MQTT architecture based botnet (Proof Of Concept) with the following and unique features. 
+Gandalph is MQTT architecture based botnet (Proof Of Concept) with the following and unique features. 
 
 The botmaster client runs in every browser existent, and you could upload your client UI to a server and do cross-requests to the core message broker of the botnet. The bot builder compiles to Mac, Linux, Windows, APK and iOS. 
 
