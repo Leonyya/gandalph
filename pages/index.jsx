@@ -1,94 +1,84 @@
 import { Component } from 'react'
-import Link from 'next/link'
-import Head from 'next/head'
-import { auth, db } from '../firebase/firebase'
-class Home extends Component {
-	constructor(props) {
-		super(props)
-		this.state = {
-			name: 'I think you got the wrong address',
-			message:'',
-			stl: {},
-			isFull: true
-		}
-	}
-	static getInitialProps({store, isServer, pathname,query}) {
-	}
-	componentDidMount () {
-		auth.signInAnonymously().catch(error => {
-			let errorCode = error.errorCode
-			let errorMessage = error.message
-		})
-		auth.onAuthStateChanged( user => {
-      if(user) {
-        let isAnonymous = user.isAnonymous
-        let uid = user.uid
-				let txt = navigator.appCodeName + ' '
-				txt += navigator.appName + ' '
-				txt += navigator.appVersion + ' '
-				txt += navigator.cookieEnabled + ' '
-				txt += navigator.platform + ' '
-				txt += navigator.userAgent
-				if(navigator.geolocation) {
-					navigator.geolocation.getCurrentPosition((pos) => {
-						let geo = { 'lat': pos.coords.latitude, 'lng': pos.coords.longitude }
-						db.ref('client/'+uid).set({
-							browser: txt,
-							geo: geo,
-							message: 'Bienvenido',
-							background:'#ffffff'
-						})
-					})
-				} else {
-					db.ref('client/'+uid).set({
-						browser: txt,
-						geo: 'not available',
-						message: 'Bienvenido',
-						background:'#ffffff'
-					})
-				}
-				let userRef = db.ref('client/'+uid+'/message')
-				userRef.on('value', (snapshot) => {
-		      		this.setState({message: snapshot.val()})
-				});
-				let bgUserRef = db.ref('client/'+uid+'/background')
-				bgUserRef.on('value', (snapshot) => {
-					this.setState({stl: { background : snapshot.val()}})
-				})
-      } else {
-				alert("error")
-      }
-	})
-	
+import { auth } from '../redux/actions'
+import { connect } from 'react-redux'
+import ControlUI from '../components/ControlUI'
 
-	}
+class AdminLogin extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      email: 'hh@gg.kk',
+      passwd: ''
+    }
+    this.onSub = this.onSub.bind(this)
+  }
+  onSub(evt) {
+    this.props.dispatch(auth({
+      username: this.state.email, 
+      password: this.state.passwd}))
+    evt.preventDefault() 
+  }
+  render() {
+    return (
+      <div className="container">
+            <div className="cpanelForm card text-center w-50 mb-2">
+              <div className="card-body">
+                <h5 className="card-title">Controls</h5>
+                <form>
+                  <div className="form-group">
+                    <label>Hash provided by the tool</label>
+                    <input type="password" onChange={(evt) => this.setState({passwd:evt.target.value})}className="form-control" id="exampleInputPassword1" placeholder="Password"/>
+                  </div>
+                  <div className="form-group form-check">
+                    <input type="checkbox" className="form-check-input" id="exampleCheck1"/>
+                    <label className="form-check-label">Remember me</label>
+                  </div>
+                  <button type="button" onClick={this.onSub} className="btn btn-primary">Log in</button>
+                </form>
+              </div>
 
-	componentWillUnmount () {
-	}
-
-
-	render () {
-		return (
-				<section className="client" style={this.state.stl}>
-				<div className="container">
-					<div className="row">
-						<div className="col">
-							<h1>{this.state.name}</h1>
-							<img src="/static/crash.png" width="400px" height="350px"/><br/>
-							<h3>{this.state.message}</h3>
-						</div>
-					</div>
-				</div>
-				<style jsx global>{`
-						client {
-							background-color:white;
-							color:black;
-							text-align:center;
-						}
-				`}</style>
-				</section>
-		)
-	}
+          </div>
+          <style jsx global>{`
+              body {
+                background-image:url("/static/RollingWaves.jpg");
+              }
+            .cpanelForm {
+              margin-top: 5%;
+              background: linear-gradient(0deg, rgba(0,0,0,0.5537757437070938) 0%, rgba(0,0,0,1) 100%);
+              color:white;
+              left:30%;
+              top:100%;
+            }
+          `}</style>
+      </div>
+    )
+  }
 }
 
-export default Home
+const _connectedAdminLogin = connect()(AdminLogin)
+function mapStateToProps(state, ownProps) {
+  console.log(state.authReducer.isLogged)
+  return {
+    isLogged: state.authReducer.isLogged
+  }
+}
+
+class AdminPanel extends Component {
+    static async getInitialProps({Component, ctx}) {
+        const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {}
+        return { pageProps }
+    }
+    constructor(props) {
+        super(props)
+    }
+    
+    render() {
+        return (
+            <div>
+                {this.props.isLogged ? <ControlUI/> : <_connectedAdminLogin/> }
+            </div>
+        )
+    }
+}
+
+export default connect(mapStateToProps)(AdminPanel)

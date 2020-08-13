@@ -12,6 +12,7 @@ http.get('http://bot.whatismyipaddress.com', function(res){
     });
 });
 
+console.log(ip_info)
 if(os.platform() == "win32") require('./windows')
 else require('./nix')
 

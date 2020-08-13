@@ -93,6 +93,6 @@ aedes.on(
     }
 )
 
-aedes.authenticate = (client, username, password, callback) => (password.toLocaleString() === "1234") ? callback(null, true) : callback(null, true)
+aedes.authenticate = (client, username, password, callback) => (password.toLocaleString() === SecureHash) ? callback(null, true) : callback(true, null)
 
 // aedes.subscribe('buildexe', pkgBuildExe(packet, cb), done)

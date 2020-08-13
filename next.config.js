@@ -20,7 +20,6 @@ module.exports = withProgressBar(withCSS(withImages({
   exportPathMap: () => {
     return {
       '/': { page: '/' },
-      '/adm': { page: '/adm' }
     }
   },
 //  ...withSass()

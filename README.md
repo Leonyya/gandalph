@@ -65,7 +65,13 @@ $ yarn export
 ```
 This will create static files of the Progressive Web Application in out/ folder, then you can setup your hosting and this will connect to your local message broker every time. (Broken, host and port configuration not yet)
 
- ### T
+### Messaging structure
+| Topic           | PublishOnMessage | Publish                                                                                  | Message                       |
+|-----------------|------------------|------------------------------------------------------------------------------------------|-------------------------------|
+| Admin/browsers  |                  | { headers: { status: '', nonce : '', clientId: ''}, body : { method : '', params: [] } } |                               |
+| Admin/desktop   |                  | { headers: { status: '', nonce: '', clientId: ''}, body: { method : '', params: [] } }   |                               |
+| Bot/{client_id} |                  | { headers: { status: '', nonce: '', apikey: ''}, body: { method: '', params: [] } }      | { status: '', telemetry: {} } |
+| sonde           | connect          | { client_id : '' , log: '' }                                                             |                               |
 
 ### Development setup
 You'll need nodemon, if you have it installed this should work:
