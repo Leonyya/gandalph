@@ -38,7 +38,7 @@
     "react-simple-code-editor": "^0.11.0",
     "redux": "^4.0.4",
     "redux-thunk": "^2.3.0",
-    "rollup": "^2.23.1",
+    "rollup": "^2.28.2",
     "socket.io": "^2.2.0",
     "socket.io-client": "^2.2.0",
     "webpack": "^4.41.5"
@@ -51,6 +51,7 @@
     "node-sass": "^4.7.2",
     "nodemon": "^1.19.1",
     "redis": "^2.8.0",
-    "remote-redux-devtools": "^0.5.16"
+    "remote-redux-devtools": "^0.5.16",
+    "rollup-plugin-javascript-obfuscator": "^1.0.4"
   }
 }

