@@ -1,6 +1,4 @@
 # Gandalph
-![Alt text](/crash.png?raw=true)
-
 Gandalph is MQTT architecture based botnet (Proof Of Concept) with the following and unique features. 
 
 The botmaster client runs in every browser, and you could upload your client UI to a server and do cross-requests to the core message broker of the botnet. The bot builder is essentially for Javascript-based DDoS attack. There's some sort of compatibility for desktop platforms but still experimental. Looking to move forward
@@ -14,7 +12,7 @@ The botmaster client runs in every browser, and you could upload your client UI 
 - Webassembly module injection in-the-wild.
 - Migrate to other message broker core in-the-wild
 - Monero and Electroneum stratum mining pool
-- 
+  
 ( Implemented in some time in the history of the repo with help of memoryjs but removed )
 About the webassembly module injection, from the view you can upload a .wasm file and got compiled, then uploaded the binary (opcode) via message to the bot
 The return can be checked in logs panel. There's an integrated lib inside the VM that exposes the following WinAPIs in case of windows payload:
