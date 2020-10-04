@@ -7,6 +7,8 @@ The botmaster client runs in every browser, and you could upload your client UI 
 - Telemetry of connected bots in QoS 1 and 2
 - Running 1000 clients / 30,000 messages per minute avg concurrencies.
 - DDoS attack
+- 
+![Alt text](/architecture-diagram.png?raw=true)
 
 ## Upcoming
 - Webassembly module injection in-the-wild.
@@ -21,7 +23,6 @@ WriteProcessMemory
 VirtualProtectEx
 VirtualAllocEx
 
-![Alt text](/architecture-diagram.png?raw=true)
 
 ## Installation
 From yarn manager
