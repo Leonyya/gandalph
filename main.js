@@ -3,8 +3,8 @@ const { exec } = require('child_process')
 const next = require('next')
 const webpack = require('webpack')
 const path = require('path')
-const BuildDesktopPayload = require('./lib/build/BuildDesktopPayload')
-
+const BuildDesktopPayload = require('./lib/build/franky')
+const bundler = require('./lib/build/bundler')
 // NextJS init 
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
@@ -64,7 +64,7 @@ server.listen(wsPort, function() {
     console.log('> Your secure password, auth with it ', SecureHash )
 })
 aedes.on('client', (client) => {
-    let message = `Client ${client.id} just connected from`
+    let message = `Client ${client.id} just connected`
     log(message)
     aedes.publish({
         cmd: 'publish',
@@ -95,5 +95,6 @@ aedes.on(
 
 aedes.authenticate = (client, username, password, callback) => (password.toLocaleString() === SecureHash) ? callback(null, true) : callback(true, null)
 
+bundler();
 
 // aedes.subscribe('buildexe', pkgBuildExe(packet, cb), done)
