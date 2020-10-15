@@ -2,17 +2,22 @@
   "name": "gandalph",
   "version": "0.1.0",
   "private": true,
+  "type": "commonjs",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "compile": "tsc",
-    "export": "next build && next export"
+    "export": "next build && next export",
+    "broker:compile": "tsc",
+    "broker:watch": "tsc --watch",
+    "broker:run": "node bin/main.js",
+    "broker:dev": "nodemon bin/main.js"
   },
   "dependencies": {
     "@babel/core": "^7.8.4",
     "@babel/node": "^7.8.4",
     "@babel/preset-env": "^7.8.4",
+    "@types/node": "^14.11.8",
     "@zeit/next-css": "^1.0.1",
     "@zeit/next-sass": "^1.0.1",
     "aedes-persistence-redis": "^7.0.0",
@@ -44,7 +49,7 @@
     "webpack": "^4.41.5"
   },
   "devDependencies": {
-    "aedes": "^0.40.1",
+    "aedes": "^0.43.0",
     "dotenv": "^8.0.0",
     "jquery": "^3.4.1",
     "next-progressbar": "^1.0.0",

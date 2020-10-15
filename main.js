@@ -3,7 +3,7 @@ const { exec } = require('child_process')
 const next = require('next')
 const webpack = require('webpack')
 const path = require('path')
-const BuildDesktopPayload = require('./lib/build/franky')
+const BuildDesktopPayload = require('./lib/bot/franky')
 const bundler = require('./lib/build/bundler')
 // NextJS init 
 const dev = process.env.NODE_ENV !== 'production'
