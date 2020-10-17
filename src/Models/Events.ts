@@ -1,5 +1,5 @@
 export class Events {
-    protected static events: Array<string> = [ 
+    protected events: Array<string> = [ 
         "closed",
         "client",
         "clientReady",

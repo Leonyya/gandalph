@@ -1,14 +1,27 @@
 import { Server, Client, AuthenticateError, AedesPublishPacket, PublishPacket, Subscription } from 'aedes'
-import { createServer, Socket } from 'net'
-import { Packet } from 'mqtt-packet'
+import { createServer, Socket } from 'net';
+import { Packet } from 'mqtt-packet';
+import RedisPersistence from 'aedes-persistence-redis';
 
-import hash from './Security/hashgen'
+import { Dropper } from "./Bot/Dropper";
+import hash from './Security/hashgen';
+
+
+const persistence = new RedisPersistence({
+  port: 6379,
+  host: '127.0.0.1',
+  family: 4,
+  db: 0,
+  maxSessionDelivery: 100,
+  packetTTL: (packet: any) => 10
+})
 
 const broker = Server({
   concurrency: 100,
   heartbeatInterval: 60000,
   connectTimeout: 30000,
   id: 'aedes',
+  persistence:persistence,
   preConnect: (client: Client, packet: Packet, callback) => {
     if (client.req) {
       callback(new Error('not websocket stream'), false)
@@ -20,7 +33,7 @@ const broker = Server({
     }
   },
   authenticate: (client: Client, username: string, password: Buffer, callback) => {
-    if (username === 'test' && password === Buffer.from(hash(30)) && client.version === 4) {
+    if (/*username === 'test' && password === Buffer.from(hash(30)) && client.version === 4*/true) {
       callback(null, true)
     } else {
       const error = new Error() as AuthenticateError
@@ -107,7 +120,7 @@ broker.on('ping', (packet, client) => {
 })
 
 broker.on('publish', (packet, client) => {
-  console.log(`client: ${client.id} published packet ${packet.cmd}`)
+  console.log(`client: ${client} published packet ${packet.cmd}`)
 })
 
 broker.on('ack', (packet, client) => {
@@ -139,13 +152,14 @@ broker.unsubscribe('aaaa', (packet: AedesPublishPacket, cb) => {
   console.log('done unsubscribing')
 })
 
-/*const persistence = aedesPersistenceRedis({
-  port: 6379,
-  host: '127.0.0.1',
-  family: 4,
-  db: 0,
-  maxSessionDelivery: 100,
-  packetTTL: (packet) => 10
-})*/
-
+try {
+  Dropper().then(()=> {
+    console.log("Bot built")
+  })
+} catch(e) {
+  console.error(e)
+}
+server.listen('8888', function () {
+  console.log('Aedes listening on :', server.address())
+})
 //broker.close()

@@ -1,6 +1,6 @@
 declare module "rollup-plugin-javascript-obfuscator";
 
-interface JSOBoptions {
+/*interface JSOBoptions {
     compact?: boolean;
     controlFlowFlattening?: boolean;
     controlFlowFlatteningThreshold?: number;
@@ -49,4 +49,4 @@ type JSOBResult = {
     map: string;
 }
 
-export function javascriptObfuscator(options: JSOBoptions): JSOBResult;
+export function javascriptObfuscator(options: JSOBoptions): JSOBResult;*/

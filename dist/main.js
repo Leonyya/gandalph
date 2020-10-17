@@ -5,12 +5,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const aedes_1 = require("aedes");
 const net_1 = require("net");
-const hashgen_1 = __importDefault(require("./Security/hashgen"));
+const aedes_persistence_redis_1 = __importDefault(require("aedes-persistence-redis"));
+const Dropper_1 = require("./Bot/Dropper");
+const persistence = new aedes_persistence_redis_1.default({
+    port: 6379,
+    host: '127.0.0.1',
+    family: 4,
+    db: 0,
+    maxSessionDelivery: 100,
+    packetTTL: (packet) => 10
+});
 const broker = aedes_1.Server({
     concurrency: 100,
     heartbeatInterval: 60000,
     connectTimeout: 30000,
     id: 'aedes',
+    persistence: persistence,
     preConnect: (client, packet, callback) => {
         if (client.req) {
             callback(new Error('not websocket stream'), false);
@@ -23,7 +33,7 @@ const broker = aedes_1.Server({
         }
     },
     authenticate: (client, username, password, callback) => {
-        if (username === 'test' && password === Buffer.from(hashgen_1.default(30)) && client.version === 4) {
+        if ( /*username === 'test' && password === Buffer.from(hash(30)) && client.version === 4*/true) {
             callback(null, true);
         }
         else {
@@ -94,7 +104,7 @@ broker.on('ping', (packet, client) => {
     console.log(`client: ${client.id} ping with packet ${packet.cmd}`);
 });
 broker.on('publish', (packet, client) => {
-    console.log(`client: ${client.id} published packet ${packet.cmd}`);
+    console.log(`client: ${client} published packet ${packet.cmd}`);
 });
 broker.on('ack', (packet, client) => {
     console.log(`client: ${client.id} ack with packet ${packet.cmd}`);
@@ -119,6 +129,17 @@ broker.unsubscribe('aaaa', (packet, cb) => {
     cb();
 }, () => {
     console.log('done unsubscribing');
+});
+try {
+    Dropper_1.Dropper().then(() => {
+        console.log("Bot built");
+    });
+}
+catch (e) {
+    console.error(e);
+}
+server.listen('8888', function () {
+    console.log('Aedes listening on :', server.address());
 });
 //broker.close()
 //# sourceMappingURL=main.js.map
