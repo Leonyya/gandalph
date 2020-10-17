@@ -66,6 +66,6 @@
     "skipLibCheck": true,                     /* Skip type checking of declaration files. */
     "forceConsistentCasingInFileNames": true  /* Disallow inconsistently-cased references to the same file. */
   },
-  "include": ["src/main.ts", "@types/g.d.ts", "@types/aedes.d.ts", "@types/paho.d.ts", "vendor/paho-mqtt"],
+  "include": ["src/main.ts", "@types/g.d.ts", "@types/aedes.d.ts", "@types/paho.d.ts", "vendor/paho-mqtt", "vendor/mqtt.min.js"],
   "exclude": ["node_modules", "**/*.spec.ts"],
 }

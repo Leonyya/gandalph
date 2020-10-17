@@ -4,7 +4,7 @@ import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import typescript from '@rollup/plugin-typescript'
 import { terser } from 'rollup-plugin-terser'
-
+import nodePolyfills from "rollup-plugin-node-polyfills";
 export async function Dropper() {
 
     const inputOptions: rollup.InputOptions = { 
@@ -17,7 +17,9 @@ export async function Dropper() {
                 "sourceMap": true,
                 "esModuleInterop": true,
             }),
-            resolve(),
+            resolve({
+                browser: true
+            }),
             commonjs(),
             obfuscatorPlugin({
                 compact: true,
@@ -56,7 +58,7 @@ export async function Dropper() {
         plugins: [
             terser(),
         ],
-        sourcemap: true
+        sourcemap: true,
     };
 
     let bundle;
@@ -72,8 +74,8 @@ export async function Dropper() {
     const { output } = await bundle.generate(outputOptions);
 
     for (const chunkOrAsset of output) {
-        if(chunkOrAsset.type === 'asset') console.log('Asset', chunkOrAsset);
-        else console.log('Chunk', chunkOrAsset.modules);
+        if(chunkOrAsset.type === 'asset') console.log('Asset generated');
+        else console.log('Chunk generated');
     }
 
     await bundle.write(outputOptions);

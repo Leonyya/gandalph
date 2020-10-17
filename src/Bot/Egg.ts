@@ -11,24 +11,24 @@ var location = {
   port: '8888'
 }
   // Create a client instance
-var client = new Paho.Client(location.hostname, Number(location.port),"/","clientId");
+var client = new Paho.Client(location.hostname, Number(location.port),"","clientId");
 
 // set callback handlers
 client.onConnectionLost = onConnectionLost;
 client.onMessageArrived = onMessageArrived;
 
 // connect the client
-client.connect({onSuccess:onConnect});
+client.connect({userName: 'test', password: 'test', onSuccess:onConnect});
 
 
 // called when the client connects
 function onConnect() {
   // Once a connection has been made, make a subscription and send a message.
   console.log("onConnect");
-  client.subscribe("World");
+  /*client.subscribe("World");
   let message = new Paho.MQTT.Message("Hello");
   message.destinationName = "World";
-  client.send(message);
+  client.send(message);*/
 }
 
 // called when the client loses its connection

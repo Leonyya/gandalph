@@ -1,11 +1,12 @@
 import { Server, Client, AuthenticateError, AedesPublishPacket, PublishPacket, Subscription } from 'aedes'
 import { createServer, Socket } from 'net';
+import { createServer as httpCreateServer } from 'http';
+import ws from 'websocket-stream';
 import { Packet } from 'mqtt-packet';
 import RedisPersistence from 'aedes-persistence-redis';
 
 import { Dropper } from "./Bot/Dropper";
 import hash from './Security/hashgen';
-
 
 const persistence = new RedisPersistence({
   port: 6379,
@@ -16,6 +17,7 @@ const persistence = new RedisPersistence({
   packetTTL: (packet: any) => 10
 })
 
+const sechash = Buffer.from(hash(30));
 const broker = Server({
   concurrency: 100,
   heartbeatInterval: 60000,
@@ -23,17 +25,16 @@ const broker = Server({
   id: 'aedes',
   persistence:persistence,
   preConnect: (client: Client, packet: Packet, callback) => {
+    console.log('Client attempting to log')
     if (client.req) {
       callback(new Error('not websocket stream'), false)
-    }
-    if (client.conn instanceof Socket && client.conn.remoteAddress === '::1') {
-      callback(null, true)
+      console.log("Client request, using websockets?")
     } else {
-      callback(new Error('connection error'), false)
+      callback(null, true)
     }
   },
   authenticate: (client: Client, username: string, password: Buffer, callback) => {
-    if (/*username === 'test' && password === Buffer.from(hash(30)) && client.version === 4*/true) {
+    if (username && password) {
       callback(null, true)
     } else {
       const error = new Error() as AuthenticateError
@@ -41,6 +42,7 @@ const broker = Server({
 
       callback(error, false)
     }
+    callback(null,true)
   },
   authorizePublish: (client: Client, packet: PublishPacket, callback) => {
     if (packet.topic === 'aaaa') {
@@ -65,7 +67,7 @@ const broker = Server({
 
     callback(null, sub)
   },
-  authorizeForward: (client: Client, packet: AedesPublishPacket) => {
+  /*authorizeForward: (client: Client, packet: AedesPublishPacket) => {
     if (packet.topic === 'aaaa' && client.id === 'I should not see this') {
       return null
       // also works with return undefined
@@ -78,10 +80,9 @@ const broker = Server({
     }
 
     return packet
-  }
+  }*/
 })
 
-const server = createServer(broker.handle)
 
 broker.on('closed', () => {
   console.log('closed')
@@ -112,7 +113,7 @@ broker.on('clientError', client => {
 })
 
 broker.on('connectionError', client => {
-  console.log('connectionError')
+  console.log('connectionError ')
 })
 
 broker.on('ping', (packet, client) => {
@@ -136,21 +137,21 @@ broker.on('unsubscribe', (subscriptions, client) => {
 })
 
 
-broker.subscribe('aaaa', (packet: AedesPublishPacket, cb) => {
+/*broker.subscribe('aaa', (packet: AedesPublishPacket, cb) => {
   console.log('cmd')
   console.log(packet.cmd)
   cb()
 }, () => {
-  console.log('done subscribing')
-})
+  console.log('Broker connected')
+})*/
 
-broker.unsubscribe('aaaa', (packet: AedesPublishPacket, cb) => {
+/*broker.unsubscribe('aaaa', (packet: AedesPublishPacket, cb) => {
   console.log('cmd')
   console.log(packet.cmd)
   cb()
 }, () => {
   console.log('done unsubscribing')
-})
+})*/
 
 try {
   Dropper().then(()=> {
@@ -159,7 +160,16 @@ try {
 } catch(e) {
   console.error(e)
 }
-server.listen('8888', function () {
-  console.log('Aedes listening on :', server.address())
+
+
+const server = httpCreateServer()
+ws.createServer({ server: server}, () => broker.handle)
+server.listen(8888, function () {
+  console.log('Secure HASH: ' + sechash)
 })
 //broker.close()
+
+/*const server = createServer(broker.handle)
+server.listen(8888, () => {
+  console.log('BROKER STARTED WTF IS GOING ONNN')
+})*/

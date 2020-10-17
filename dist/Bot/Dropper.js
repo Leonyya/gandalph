@@ -31,7 +31,9 @@ function Dropper() {
                     "sourceMap": true,
                     "esModuleInterop": true,
                 }),
-                plugin_node_resolve_1.default(),
+                plugin_node_resolve_1.default({
+                    browser: true
+                }),
                 plugin_commonjs_1.default(),
                 rollup_plugin_javascript_obfuscator_1.default({
                     compact: true,
@@ -69,7 +71,7 @@ function Dropper() {
             plugins: [
                 rollup_plugin_terser_1.terser(),
             ],
-            sourcemap: true
+            sourcemap: true,
         };
         let bundle;
         try {
@@ -82,9 +84,9 @@ function Dropper() {
         const { output } = yield bundle.generate(outputOptions);
         for (const chunkOrAsset of output) {
             if (chunkOrAsset.type === 'asset')
-                console.log('Asset', chunkOrAsset);
+                console.log('Asset generated');
             else
-                console.log('Chunk', chunkOrAsset.modules);
+                console.log('Chunk generated');
         }
         yield bundle.write(outputOptions);
     });
