@@ -163,7 +163,10 @@ try {
 
 
 const server = httpCreateServer()
-ws.createServer({ server: server}, () => broker.handle)
+ws.createServer({ 
+  server: server,
+  perMessageDeflate: false
+}, broker.handle)
 server.listen(8888, function () {
   console.log('Secure HASH: ' + sechash)
 })
